@@ -1,12 +1,11 @@
 import { IFileReader } from "./file-reader.interface.js";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { Offer } from "../../../constants/types.js";
 
 export class TSVFileReader implements IFileReader {
   private rawData: string[] = [];
 
-  public read(paths: string[]): void {
+  public read(paths: string[]): TSVFileReader {
     paths.forEach((path) => {
       try {
         const content = readFileSync(resolve(path), 'utf-8');
@@ -16,10 +15,12 @@ export class TSVFileReader implements IFileReader {
       } catch (er) {
         console.error(`Error reading file at path: ${path}`);
       }
-    })
+    });
+    return this;
   }
 
-  public toArray(): Offer {
-    return {} as Offer;
+  public toArray(): string[][] {
+    const parsedData = this.rawData.map((i) => i.split('\n').filter((s) => !!s.trim()).map((ii) => ii.split('\t'))).flat()
+    return parsedData as string[][];
   }
 }
