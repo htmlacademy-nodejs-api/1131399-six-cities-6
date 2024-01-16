@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { Command } from "./command.interface.js";
 import { resolve } from "node:path";
+import chalk from "chalk";
 
 type ObjectWithVersion = {
   version: string;
@@ -30,6 +31,9 @@ export class VersionCommand implements Command {
   }
 
   public execute(): void {
-    console.info(`version: ${this.readVersion()}`)
+    const versionStyle = chalk.italic.yellowBright;
+    const versionNumberStyle = chalk.bold.italic.yellowBright;
+
+    console.info(`${versionStyle('version:')} ${versionNumberStyle(this.readVersion())}`)
   }
 }
