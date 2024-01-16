@@ -15,7 +15,7 @@ export class VersionCommand implements Command {
   private hasVersionField(data: unknown): boolean {
     if (!data || Array.isArray(data) || typeof data !== 'object') {
       return false;
-    };
+    }
     return Object.hasOwn(data, 'version');
   }
 
