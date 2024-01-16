@@ -9,7 +9,7 @@ function bootstrap() {
     new VersionCommand(),
     new ImportCommand()
   ]);
-  cliApplication.processCommand(process.argv)
+  cliApplication.processCommand(process.argv);
 }
 
 bootstrap();

@@ -3,7 +3,7 @@ export enum Property {
   House = 'house',
   Room = 'room',
   Hotel = 'hotel',
-};
+}
 
 export enum Amenities {
   Breakfast = 'breakfast',
@@ -14,13 +14,13 @@ export enum Amenities {
   Washer = 'washer',
   Towels = 'towels',
   Fridge = 'fridge',
-};
+}
 
 export const Commands = {
   Help: '--help',
   Version: '--version',
   Import: '--import',
-}
+};
 
 export enum City {
   Paris = 'Paris',

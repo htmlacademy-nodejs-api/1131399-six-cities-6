@@ -1,5 +1,5 @@
-import { City } from "./enums.js";
-import { Coordinates } from "./types.js";
+import { City } from './enums.js';
+import { Coordinates } from './types.js';
 
 export const cities: Record<City, Coordinates> = {
   Paris: {
@@ -26,4 +26,4 @@ export const cities: Record<City, Coordinates> = {
     lat: '51.225402',
     long: '6.776314'
   },
-}
+};

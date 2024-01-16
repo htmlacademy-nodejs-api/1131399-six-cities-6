@@ -1,7 +1,7 @@
-import { TSVFileReader } from "../../shared/libs/file-reader/tsv-file-reader.js";
-import { OfferFactory } from "../offer-factory.js";
-import { Command } from "./command.interface.js";
-import { resolve } from "node:path";
+import { TSVFileReader } from '../../shared/libs/file-reader/tsv-file-reader.js';
+import { OfferFactory } from '../offer-factory.js';
+import { Command } from './command.interface.js';
+import { resolve } from 'node:path';
 
 
 export class ImportCommand implements Command {

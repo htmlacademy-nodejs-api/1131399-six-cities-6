@@ -1,4 +1,4 @@
-import { Offer } from "../constants/types.js";
+import { Offer } from '../constants/types.js';
 import _ from 'lodash';
 type key = keyof Offer;
 
@@ -21,22 +21,22 @@ export class OfferFactory {
     athour: null,
     comments: null,
     coords: null,
+  };
 
-  }
   public getOffer(data: string[]):Offer {
     const currentOffer = (Object.keys(this.offer) as key[]).reduce((acc, i, index) => {
-        const value = data[index];
-        if (value === 'true') {
-          _.set(acc, i, true);
-          return acc;
-        }
-        if (value === 'false') {
-          _.set(acc, i, false);
-          return acc;
-        } else {
-          _.set(acc, i, data[index]);
-          return acc;
-        }
+      const value = data[index];
+      if (value === 'true') {
+        _.set(acc, i, true);
+        return acc;
+      }
+      if (value === 'false') {
+        _.set(acc, i, false);
+        return acc;
+      } else {
+        _.set(acc, i, data[index]);
+        return acc;
+      }
     }, Object.assign({}, this.offer) as Offer);
     return currentOffer;
   }

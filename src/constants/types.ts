@@ -1,4 +1,9 @@
-import { Amenities, City, Property } from "./enums.js";
+import { Amenities, City, Property } from './enums.js';
+
+export type Coordinates = {
+  lat: string;
+  long: string;
+}
 
 export type Offer = {
   title: string | null;
@@ -18,9 +23,4 @@ export type Offer = {
   athour: string | null;
   comments: string[] | null;
   coords: Coordinates | null;
-}
-
-export type Coordinates = {
-  lat: string;
-  long: string;
 }

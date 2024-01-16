@@ -1,6 +1,6 @@
-import { IFileReader } from "./file-reader.interface.js";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { IFileReader } from './file-reader.interface.js';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 export class TSVFileReader implements IFileReader {
   private rawData: string[] = [];
@@ -20,7 +20,7 @@ export class TSVFileReader implements IFileReader {
   }
 
   public toArray(): string[][] {
-    const parsedData = this.rawData.map((i) => i.split('\n').filter((s) => !!s.trim()).map((ii) => ii.split('\t'))).flat()
+    const parsedData = this.rawData.map((i) => i.split('\n').filter((s) => !!s.trim()).map((ii) => ii.split('\t'))).flat();
     return parsedData as string[][];
   }
 }

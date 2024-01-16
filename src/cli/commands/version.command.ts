@@ -1,7 +1,7 @@
-import { readFileSync } from "node:fs";
-import { Command } from "./command.interface.js";
-import { resolve } from "node:path";
-import chalk from "chalk";
+import { readFileSync } from 'node:fs';
+import { Command } from './command.interface.js';
+import { resolve } from 'node:path';
+import chalk from 'chalk';
 
 type ObjectWithVersion = {
   version: string;
@@ -13,7 +13,9 @@ export class VersionCommand implements Command {
   ){}
 
   private hasVersionField(data: unknown): boolean {
-    if (!data || Array.isArray(data) || typeof data !== 'object') return false;
+    if (!data || Array.isArray(data) || typeof data !== 'object') {
+      return false;
+    };
     return Object.hasOwn(data, 'version');
   }
 
@@ -26,6 +28,7 @@ export class VersionCommand implements Command {
       throw new Error('There is no version in the file provided');
     }
   }
+
   public getName(): string {
     return '--version';
   }
@@ -33,7 +36,6 @@ export class VersionCommand implements Command {
   public execute(): void {
     const versionStyle = chalk.italic.yellowBright;
     const versionNumberStyle = chalk.bold.italic.yellowBright;
-
-    console.info(`${versionStyle('version:')} ${versionNumberStyle(this.readVersion())}`)
+    console.info(`${versionStyle('version:')} ${versionNumberStyle(this.readVersion())}`);
   }
 }

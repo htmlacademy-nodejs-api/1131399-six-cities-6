@@ -1,4 +1,4 @@
-import { Commands } from "../constants/enums.js";
+import { Commands } from '../constants/enums.js';
 type ParsedCommand = {
   name: string | null;
   args: string[] | null;

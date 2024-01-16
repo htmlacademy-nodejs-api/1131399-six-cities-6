@@ -1,6 +1,6 @@
-import { Command } from "./commands/command.interface.js"
-import { Commands } from "../constants/enums.js";
-import { CommandParser } from "./command-parser.js";
+import { Command } from './commands/command.interface.js';
+import { Commands } from '../constants/enums.js';
+import { CommandParser } from './command-parser.js';
 
 type CommandsCollection = Record<string, Command>;
 
@@ -17,7 +17,7 @@ export class CLIApplication {
         throw new Error(`Command ${item.getName()} is already registered`);
       }
       this.commands[item.getName()] = item;
-    })
+    });
   }
 
   public getCommand(commandName: string): Command | never {
