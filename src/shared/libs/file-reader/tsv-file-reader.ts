@@ -9,6 +9,7 @@ export class TSVFileReader extends EventEmitter implements IFileReader {
   constructor(private readonly fileName: string) {
     super();
   }
+
   private rawData: string[] = [];
 
   public async read(): Promise<TSVFileReader> {

@@ -4,7 +4,7 @@ import { EventEmitter } from 'node:events';
 
 export class FileWriter extends EventEmitter implements IFileWriter {
   constructor(private readonly filepath: string) {
-    super()
+    super();
   }
 
   public write(data: string): void {
@@ -12,7 +12,7 @@ export class FileWriter extends EventEmitter implements IFileWriter {
       if (err) {
         console.log('Error adding data to the file', err?.message);
       }
-    })
+    });
   }
 
 
