@@ -1,8 +1,10 @@
+import path from 'node:path';
 import axios from 'axios';
 import { faker } from '@faker-js/faker';
 import { PORT, api_url } from './constants.js';
 import { Offer } from '../constants/types.js';
 import { Amenities, Property } from '../constants/enums.js';
+import { FileWriter } from '../shared/libs/file-reader/file-writer.js';
 
 export const getOffersDataFromApi = () => {
   const url = `${api_url}:${PORT}/offers`;
@@ -14,16 +16,17 @@ export const getCitiesDataFromApi = () => {
   return axios.get(url);
 }
 
-export const getFakeOffersDataFromApi = (n = 100) => {
+export const generateFakeOffersData = (n = 100, fileName: string) => {
   return getCitiesDataFromApi()
   .then(({ data: cities }) => {
     return getOffersDataFromApi()
     .then(({ data }) => {
+      const fileWriter = new FileWriter(path.resolve('mocks', fileName));
       const citiesArray = Object.keys(cities);
       const city = citiesArray[faker.number.int({ min: 0, max: 5 })];
       const coords = cities[city];
-      const returnDataArray: Offer[] = Array(n).fill(data).map((i) => {
-        return ({
+      return Array(n).fill(data).map((i) => {
+        return (fileWriter.write(getTSVStringFromOfferObject({
           ...Object.keys(i).reduce((acc, key) => ({
             ...acc,
             [key]: key,
@@ -47,9 +50,8 @@ export const getFakeOffersDataFromApi = (n = 100) => {
           },
           amenities: Object.keys(Amenities)[faker.number.int({ min: 0, max: 7 })] as Amenities,
           propertyType: Object.keys(Property)[faker.number.int({ min: 0, max: 3 })] as Property,
-        });
+        })));
       });
-      return returnDataArray;
     })
   })
 }
@@ -98,10 +100,4 @@ export const getTSVStringFromOfferObject = (object: Offer): string => {
     coordsString
   }).join('\t');
   return string;
-}
-
-export const getFakeOffersString = (n: number) => {
-  return getFakeOffersDataFromApi(n).then((data) => {
-    return data.map((i) => getTSVStringFromOfferObject(i)).join('\n');
-  })
 }
