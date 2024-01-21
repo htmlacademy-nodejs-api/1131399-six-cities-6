@@ -17,6 +17,7 @@ export class HelpCommand implements Command {
         --version                 # выводит номер версии
         --help                    # выводит данный текст
         --import <path>           # импортирует данные из файла в формате .tsv, расположенного в path
+        --generate <n> <filename> # генерация <n> тестовых предложений и запись их в файл <filename.tsv>
     `));
   }
 }

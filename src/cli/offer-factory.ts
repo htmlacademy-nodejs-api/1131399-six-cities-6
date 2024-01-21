@@ -26,6 +26,10 @@ export class OfferFactory {
   public getOffer(data: string[]):Offer {
     const currentOffer = (Object.keys(this.offer) as key[]).reduce((acc, i, index) => {
       const value = data[index];
+      if (i === 'coords') {
+        _.set(acc, i, JSON.parse(value));
+        return acc;
+      }
       if (value === 'true') {
         _.set(acc, i, true);
         return acc;
