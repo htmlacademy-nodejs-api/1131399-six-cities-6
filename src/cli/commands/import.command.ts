@@ -11,9 +11,12 @@ export class ImportCommand implements Command {
 
   public execute(filePaths: string[]): void {
     const offerFactory = new OfferFactory();
-    new TSVFileReader(filePaths[0]).read().then((reader) => {
-      const offers = reader.toArray().map((i) => offerFactory.getOffer(i));
+    const tsvFileReader = new TSVFileReader(filePaths[0]);
+    tsvFileReader.read();
+    tsvFileReader.on('string_ready', (data) => {
+      const offers = (data as string[][]).map((i) => offerFactory.getOffer(i));
       console.log(offers);
     });
+    tsvFileReader.on('error_reading', (e) => console.error(e.message));
   }
 }
