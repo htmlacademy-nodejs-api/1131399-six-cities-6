@@ -107,5 +107,6 @@ export const generateFakeOffersData = (n = 100, fileName: string) => getCitiesDa
   .then(({ data: cities }) => getOffersDataFromApi()
     .then(({ data }) => {
       const fileWriter = new FileWriter(path.resolve('mocks', fileName));
-      return Array(n).fill(data).map((i) => (fileWriter.write(getTSVStringFromOfferObject(createOffer(i, cities)))));
+      const offerString = Array(n).fill(data).map((i) => getTSVStringFromOfferObject(createOffer(i, cities))).join('\n');
+      fileWriter.write(offerString);
     }));

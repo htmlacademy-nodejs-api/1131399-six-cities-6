@@ -34,6 +34,10 @@ export class TSVFileReader extends EventEmitter implements IFileReader {
           }
         }
       }
+      if (currentString.length) {
+        this.emit('string_ready', this.stringToArray([currentString]));
+        currentString = '';
+      }
     } catch (error) {
       this.emit('error_reading', error);
     }

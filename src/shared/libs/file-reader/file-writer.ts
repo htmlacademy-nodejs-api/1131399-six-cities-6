@@ -1,19 +1,22 @@
 import { IFileWriter } from './file-writer.interface.js';
-import { appendFile } from 'node:fs';
 import { EventEmitter } from 'node:events';
-
+import { createWriteStream, WriteStream } from 'node:fs';
 export class FileWriter extends EventEmitter implements IFileWriter {
+  private stream: WriteStream;
   constructor(private readonly filepath: string) {
     super();
-  }
-
-  public write(data: string): void {
-    appendFile(this.filepath, `${data}\n`, (err) => {
-      if (err) {
-        console.log('Error adding data to the file', err?.message);
-      }
+    this.stream = createWriteStream(this.filepath, {
+      flags: 'w',
+      encoding: 'utf-8',
+      autoClose: true,
     });
   }
 
-
+  public async write(data: string): Promise<unknown> {
+    const result = this.stream.write(data);
+    if (!result) {
+      return new Promise((resolve) => this.stream.once('drain', resolve));
+    }
+    return Promise.resolve();
+  }
 }
