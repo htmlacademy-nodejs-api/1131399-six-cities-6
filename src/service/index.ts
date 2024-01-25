@@ -1,27 +1,20 @@
 import path from 'node:path';
 import axios, { AxiosResponse } from 'axios';
 import { faker } from '@faker-js/faker';
-import { PORT, api_url } from './constants.js';
+import { PORT, apiUrl } from './constants.js';
 import { Coordinates, Offer } from '../constants/types.js';
 import { Amenities, Property, City } from '../constants/enums.js';
 import { FileWriter } from '../shared/libs/file-reader/file-writer.js';
 
 export const getOffersDataFromApi = (): Promise<AxiosResponse<Offer>> => {
-  const url = `${api_url}:${PORT}/offers`;
+  const url = `${apiUrl}:${PORT}/offers`;
   return axios.get(url);
 };
 
 export const getCitiesDataFromApi = (): Promise<AxiosResponse<Record<City, Coordinates>>> => {
-  const url = `${api_url}:${PORT}/cities`;
+  const url = `${apiUrl}:${PORT}/cities`;
   return axios.get(url);
 };
-
-export const generateFakeOffersData = (n = 100, fileName: string) => getCitiesDataFromApi()
-  .then(({ data: cities }) => getOffersDataFromApi()
-    .then(({ data }) => {
-      const fileWriter = new FileWriter(path.resolve('mocks', fileName));
-      return Array(n).fill(data).map((i) => (fileWriter.write(getTSVStringFromOfferObject(createOffer(i, cities)))));
-    }));
 
 export const getTSVStringFromOfferObject = (object: Offer): string => {
   const {
@@ -69,6 +62,16 @@ export const getTSVStringFromOfferObject = (object: Offer): string => {
   return string;
 };
 
+const getCoordValue = (value: string | number): number => {
+  if (typeof value === 'number') {
+    return value;
+  }
+  if (typeof value === 'string') {
+    return parseFloat(value);
+  }
+  return 0;
+};
+
 export const createOffer = (offer: Offer, cities: Record<City, Coordinates>):Offer => {
   const citiesArray = Object.keys(cities);
   const city = citiesArray[faker.number.int({ min: 0, max: 5 })];
@@ -97,15 +100,12 @@ export const createOffer = (offer: Offer, cities: Record<City, Coordinates>):Off
     },
     amenities: Object.keys(Amenities)[faker.number.int({ min: 0, max: 7 })] as Amenities,
     propertyType: Object.keys(Property)[faker.number.int({ min: 0, max: 3 })] as Property,
-  })
-}
+  });
+};
 
-const getCoordValue = (value: string | number): number => {
-  if (typeof value === 'number') {
-    return value;
-  }
-  if (typeof value === 'string') {
-    return parseFloat(value);
-  }
-  return 0;
-}
+export const generateFakeOffersData = (n = 100, fileName: string) => getCitiesDataFromApi()
+  .then(({ data: cities }) => getOffersDataFromApi()
+    .then(({ data }) => {
+      const fileWriter = new FileWriter(path.resolve('mocks', fileName));
+      return Array(n).fill(data).map((i) => (fileWriter.write(getTSVStringFromOfferObject(createOffer(i, cities)))));
+    }));
