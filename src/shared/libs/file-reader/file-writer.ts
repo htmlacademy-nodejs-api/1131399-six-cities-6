@@ -8,8 +8,8 @@ export class FileWriter extends EventEmitter implements IFileWriter {
     this.stream = createWriteStream(this.filepath, {
       flags: 'w',
       encoding: 'utf-8',
-      autoClose: true,
     });
+    this.stream.on('finish', () => this.emit('finish'));
   }
 
   public async write(data: string): Promise<unknown> {
@@ -17,6 +17,7 @@ export class FileWriter extends EventEmitter implements IFileWriter {
     if (!result) {
       return new Promise((resolve) => this.stream.once('drain', resolve));
     }
+    this.stream.end();
     return Promise.resolve();
   }
 }

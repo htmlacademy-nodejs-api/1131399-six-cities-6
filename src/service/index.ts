@@ -103,10 +103,14 @@ export const createOffer = (offer: Offer, cities: Record<City, Coordinates>):Off
   });
 };
 
-export const generateFakeOffersData = (n = 100, fileName: string) => getCitiesDataFromApi()
-  .then(({ data: cities }) => getOffersDataFromApi()
-    .then(({ data }) => {
-      const fileWriter = new FileWriter(path.resolve('mocks', fileName));
-      const offerString = Array(n).fill(data).map((i) => getTSVStringFromOfferObject(createOffer(i, cities))).join('\n');
-      fileWriter.write(offerString);
-    }));
+export const generateFakeOffersData = (n = 100, fileName: string) => {
+  const fileWriter = new FileWriter(path.resolve('mocks', fileName));
+  fileWriter.on('finish', () => console.log('Запись завершена'));
+  return getCitiesDataFromApi()
+    .then(({ data: cities }) => getOffersDataFromApi()
+      .then(({ data }) => {
+        const offerString = Array(n).fill(data).map((i) => getTSVStringFromOfferObject(createOffer(i, cities))).join('\n');
+        fileWriter.write(offerString);
+      })
+    );
+};
