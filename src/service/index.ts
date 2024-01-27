@@ -114,6 +114,6 @@ export const generateFakeOffersData = (n = 100, fileName: string) => {
       .then(({ data }) => {
         const offerString = Array(n).fill(data).map((i) => getTSVStringFromOfferObject(createOffer(i, cities))).join('\n');
         fileWriter.write(offerString);
-      })
-    );
+      }).catch((error) => console.error(error.message))
+    ).catch((error) => console.error(error.message));
 };
