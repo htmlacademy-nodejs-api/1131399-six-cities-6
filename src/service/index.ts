@@ -36,7 +36,7 @@ export const getTSVStringFromOfferObject = (object: Offer): string => {
     comments,
     coords
   } = object;
-  const imagesString = images?.join(',');
+  const imagesString = images?.join(' ');
   const premiumString = premium ? Booleans.true : Booleans.false;
   const selectedString = selected ? Booleans.true : Booleans.false;
   const coordsString = JSON.stringify(coords);
