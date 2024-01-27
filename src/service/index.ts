@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 import { PORT, apiUrl } from './constants.js';
 import { Booleans, Coordinates, Offer } from '../constants/types.js';
 import { Amenities, Property, City } from '../constants/enums.js';
-import { FileWriter } from '../shared/libs/file-reader/file-writer.js';
+import { FileWriter } from '../shared/libs/file-writer/file-writer.js';
 
 export const getOffersDataFromApi = (): Promise<AxiosResponse<Offer>> => {
   const url = `${apiUrl}:${PORT}/offers`;
