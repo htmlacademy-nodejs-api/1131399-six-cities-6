@@ -2,7 +2,7 @@ import path from 'node:path';
 import axios, { AxiosResponse } from 'axios';
 import { faker } from '@faker-js/faker';
 import { PORT, apiUrl } from './constants.js';
-import { Coordinates, Offer } from '../constants/types.js';
+import { Booleans, Coordinates, Offer } from '../constants/types.js';
 import { Amenities, Property, City } from '../constants/enums.js';
 import { FileWriter } from '../shared/libs/file-reader/file-writer.js';
 
@@ -37,8 +37,8 @@ export const getTSVStringFromOfferObject = (object: Offer): string => {
     coords
   } = object;
   const imagesString = images?.join(',');
-  const premiumString = premium ? 'true' : 'false';
-  const selectedString = selected ? 'true' : 'false';
+  const premiumString = premium ? Booleans.true : Booleans.false;
+  const selectedString = selected ? Booleans.true : Booleans.false;
   const coordsString = JSON.stringify(coords);
   const string = Object.values({
     title,

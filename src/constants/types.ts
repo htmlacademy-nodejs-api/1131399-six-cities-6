@@ -24,3 +24,8 @@ export type Offer = {
   comments: string[] | null;
   coords: Coordinates | null;
 }
+
+export enum Booleans {
+  true = 'true',
+  false = 'false'
+}
