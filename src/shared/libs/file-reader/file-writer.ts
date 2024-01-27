@@ -10,6 +10,8 @@ export class FileWriter extends EventEmitter implements IFileWriter {
       encoding: 'utf-8',
     });
     this.stream.on('finish', () => this.emit('finish'));
+    this.stream.on('error', () => this.emit('error'));
+    this.stream.on('drain', () => this.emit('drain'));
   }
 
   public async write(data: string): Promise<unknown> {
