@@ -1,7 +1,7 @@
-import { ILogger } from "./logger.interface.js";
+import { ILogger } from './logger.interface.js';
 import {Logger as PinoInstance, pino } from 'pino';
 
-export class PinoLogger implements ILogger {
+export class Logger implements ILogger {
   private readonly logger: PinoInstance;
   constructor() {
     this.logger = pino();
