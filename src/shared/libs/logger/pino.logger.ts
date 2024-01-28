@@ -1,10 +1,28 @@
 import { ILogger } from './logger.interface.js';
-import {Logger as PinoInstance, pino } from 'pino';
+import {Logger as PinoInstance, pino, transport as pinoTransport } from 'pino';
+import { getLogPath } from './helpers.js';
+import { PATH_TO_LOG_FILE } from '../../../constants/constants.js';
 
 export class Logger implements ILogger {
   private readonly logger: PinoInstance;
+
   constructor() {
-    this.logger = pino();
+    const destination = getLogPath(PATH_TO_LOG_FILE);
+    const transport = pinoTransport({
+      targets: [
+        {
+          target: 'pino/file',
+          options: {
+            destination,
+          }
+        },
+        {
+          target: 'pino/file',
+          options: {}
+        }
+      ],
+    });
+    this.logger = pino(transport);
   }
 
   public warn (message: string, ...args: unknown[]): void {
