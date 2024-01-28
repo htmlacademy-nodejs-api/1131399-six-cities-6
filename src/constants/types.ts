@@ -1,15 +1,15 @@
 import { Amenities, City, Property } from './enums.js';
 
 export type Coordinates = {
-  lat: string;
-  long: string;
+  lat: string | number;
+  long: string | number;
 }
 
 export type Offer = {
   title: string | null;
   description: string | null;
   date: Date | null;
-  city: City | null;
+  city: City | string | null;
   previewImg: string | null;
   images: string[] | null;
   premium: boolean | null;
@@ -23,4 +23,9 @@ export type Offer = {
   athour: string | null;
   comments: string[] | null;
   coords: Coordinates | null;
+}
+
+export enum Booleans {
+  true = 'true',
+  false = 'false'
 }

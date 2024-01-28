@@ -20,6 +20,7 @@ export const Commands = {
   Help: '--help',
   Version: '--version',
   Import: '--import',
+  Generate: '--generate',
 };
 
 export enum City {

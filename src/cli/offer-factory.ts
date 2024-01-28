@@ -1,4 +1,4 @@
-import { Offer } from '../constants/types.js';
+import { Offer, Booleans } from '../constants/types.js';
 import _ from 'lodash';
 type key = keyof Offer;
 
@@ -26,11 +26,15 @@ export class OfferFactory {
   public getOffer(data: string[]):Offer {
     const currentOffer = (Object.keys(this.offer) as key[]).reduce((acc, i, index) => {
       const value = data[index];
-      if (value === 'true') {
+      if (i === 'coords') {
+        _.set(acc, i, JSON.parse(value));
+        return acc;
+      }
+      if (value === Booleans.true) {
         _.set(acc, i, true);
         return acc;
       }
-      if (value === 'false') {
+      if (value === Booleans.false) {
         _.set(acc, i, false);
         return acc;
       } else {
