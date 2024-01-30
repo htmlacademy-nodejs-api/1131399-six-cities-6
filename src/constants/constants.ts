@@ -27,3 +27,5 @@ export const cities: Record<City, Coordinates> = {
     long: '6.776314'
   },
 };
+
+export const PATH_TO_LOG_FILE = 'logs/application.log';
