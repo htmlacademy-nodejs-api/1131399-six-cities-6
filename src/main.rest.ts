@@ -13,7 +13,6 @@ async function bootstrap() {
   container.bind<ILogger>(Component.Logger).to(Logger).inSingletonScope();
   container.bind<IConfig<RestSchema>>(Component.Config).to(Config).inSingletonScope();
   container.bind<ILabel>(Component.Label).to(Label).inSingletonScope();
-
   const restApplication = container.get<RestApplication>(Component.RestApplication);
   await restApplication.init();
 }
