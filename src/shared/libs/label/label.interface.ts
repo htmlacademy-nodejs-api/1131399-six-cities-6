@@ -1,4 +1,4 @@
-import { labelType } from "./labels.js";
+import { labelType } from './labels.js';
 
 type GetLabel = (key: keyof labelType) => string;
 type GetAll = () => labelType;

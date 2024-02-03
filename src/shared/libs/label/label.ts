@@ -14,6 +14,6 @@ export class Label implements ILabel {
 
   public getAll () {
     return this.labels;
-  };
+  }
 
 }

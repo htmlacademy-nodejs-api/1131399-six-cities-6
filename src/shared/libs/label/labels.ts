@@ -12,4 +12,4 @@ export const labels: labelType = {
     init: 'Application initialization',
     startOnPort: 'The application starts on port:',
   }
-}
+};
