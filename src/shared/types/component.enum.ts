@@ -3,4 +3,5 @@ export const Component = {
   Logger: Symbol.for('Logger'),
   Config: Symbol.for('Config'),
   Label: Symbol.for('Label'),
+  DatabaseClient: Symbol.for('DatabaseClient'),
 } as const;
