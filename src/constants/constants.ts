@@ -29,3 +29,7 @@ export const cities: Record<City, Coordinates> = {
 };
 
 export const PATH_TO_LOG_FILE = 'logs/application.log';
+
+export const TEST_DB_PORT = '27017';
+
+export const TEST_USER_PASSWORD = '123456';

@@ -1,7 +1,6 @@
 import { Schema, Document, model } from 'mongoose';
 import { User } from '../../types/index.js';
 import { Label } from '../../libs/label/index.js';
-// import { hash } from './helpers.js';
 
 const label = new Label();
 

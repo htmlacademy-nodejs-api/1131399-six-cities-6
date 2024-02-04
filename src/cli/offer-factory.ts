@@ -1,5 +1,6 @@
 import { Offer, Booleans } from '../constants/types.js';
 import _ from 'lodash';
+import { CreateOfferDto } from '../shared/models/offer/DTO/create-offer.dto.js';
 type key = keyof Offer;
 
 export class OfferFactory {
@@ -23,8 +24,8 @@ export class OfferFactory {
     coords: null,
   };
 
-  public getOffer(data: string[]):Offer {
-    const currentOffer = (Object.keys(this.offer) as key[]).reduce((acc, i, index) => {
+  public getOffer(data: string[]):CreateOfferDto {
+    const currentOffer: CreateOfferDto = (Object.keys(this.offer) as key[]).reduce((acc, i, index) => {
       const value = data[index];
       if (i === 'coords') {
         _.set(acc, i, JSON.parse(value));
