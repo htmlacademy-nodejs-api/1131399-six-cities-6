@@ -29,5 +29,14 @@ export const labels: labelType = {
     emailIncorrect: 'Email is incorrect',
     passwordMinLengthError: 'incorrect password minimum length',
     passwordMaxLengthError: 'incorrect password maximum length',
+  },
+  user: {
+    created: 'New user created:',
+  },
+  offer: {
+    created: 'New offer created:',
+  },
+  comment: {
+    created: 'New comment created:',
   }
 };
