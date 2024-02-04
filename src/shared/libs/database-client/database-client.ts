@@ -1,5 +1,4 @@
 import * as Mongoose from 'mongoose';
-import _ from 'lodash';
 import { setTimeout } from 'node:timers/promises';
 import { injectable, inject } from 'inversify';
 import { IDatabaseClient } from './database-client.interface.js';
