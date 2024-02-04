@@ -1,10 +1,12 @@
 import * as Mongoose from 'mongoose';
 import _ from 'lodash';
+import { setTimeout } from 'node:timers/promises';
 import { injectable, inject } from 'inversify';
 import { IDatabaseClient } from './database-client.interface.js';
 import { Component } from '../../types/index.js';
 import { ILogger } from '../logger/index.js';
 import { ILabel } from '../label/label.interface.js';
+import { RETRY_COUNT, RETRY_TIMEOUT } from './constants.js';
 
 @injectable()
 export class DatabaseClient implements IDatabaseClient {
@@ -26,12 +28,26 @@ export class DatabaseClient implements IDatabaseClient {
     try {
       if (!this.isConnectedToDB()) {
         this.logger.info(this.label.get('db.connectionIsStarting'));
-        this.mongoose = await Mongoose.connect(connectString);
-        this.isConnected = true;
-        this.logger.info(this.label.get('db.connectionEstablished'));
+        let attempt = 0;
+        while (attempt < RETRY_COUNT && !this.isConnected) {
+          this.logger.info(this.label.get('db.tryNumber') + (attempt + 1));
+          try {
+            this.mongoose = await Mongoose.connect(connectString);
+            this.logger.info(this.label.get('db.connectionEstablished'));
+            this.isConnected = true;
+            attempt = 0;
+
+          } catch(e) {
+            attempt += 1;
+            if (attempt >= RETRY_COUNT) {
+              throw new Error(this.label.get('db.errorConnectingToDb'));
+            }
+            await setTimeout(RETRY_TIMEOUT);
+          }
+        }
 
       } else {
-        this.logger.info(this.label.get('db.alreadyConnected'))
+        this.logger.info(this.label.get('db.alreadyConnected'));
       }
     } catch (error) {
       this.logger.info(this.label.get('db.errorConnectingToDb'));
@@ -46,7 +62,7 @@ export class DatabaseClient implements IDatabaseClient {
         this.logger.info(this.label.get('db.isAlreadyDisconnected'));
       } else {
         await this.mongoose?.disconnect?.();
-        this.logger.info(this.label.get('db.isDisconnected'))
+        this.logger.info(this.label.get('db.isDisconnected'));
       }
     } catch(error) {
       this.logger.info(this.label.get('db.errorDisconnectingFromDb'));

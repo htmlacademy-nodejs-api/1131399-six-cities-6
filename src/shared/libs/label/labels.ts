@@ -2,7 +2,7 @@ export type labelType = Record<string, Record<string, string>>;
 
 export const labels: labelType = {
   common: {
-    noTranslation: 'Нет перевода',
+    noTranslation: 'No translation',
   },
   config: {
     errorReadingEnvFile: 'Error reading .env file',
@@ -23,5 +23,11 @@ export const labels: labelType = {
     initDatabase: 'Init Database...',
     databaseIsInitiated: 'Database connection is started',
     databaseInitiatedError: 'Database connection error',
+    tryNumber: 'database connection try #',
+  },
+  validation: {
+    emailIncorrect: 'Email is incorrect',
+    passwordMinLengthError: 'incorrect password minimum length',
+    passwordMaxLengthError: 'incorrect password maximum length',
   }
 };
