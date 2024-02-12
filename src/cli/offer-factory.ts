@@ -55,8 +55,7 @@ export class OfferFactory {
       if (['rating', 'roomsCount', 'guestsCount', 'price'].includes(i)) {
         _.set(acc, i, parseInt(value, 10));
         return acc;
-      }
-      else {
+      } else {
         _.set(acc, i, data[index]);
         return acc;
       }
