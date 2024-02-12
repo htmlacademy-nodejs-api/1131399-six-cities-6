@@ -1,5 +1,6 @@
 import { Offer, Booleans } from '../constants/types.js';
 import _ from 'lodash';
+import moment from 'moment';
 import { CreateOfferDto } from '../shared/models/offer/DTO/create-offer.dto.js';
 type key = keyof Offer;
 
@@ -38,7 +39,24 @@ export class OfferFactory {
       if (value === Booleans.false) {
         _.set(acc, i, false);
         return acc;
-      } else {
+      }
+      if (i === 'images') {
+        _.set(acc, i, value.split(','));
+        return acc;
+      }
+      if (i === 'date') {
+        _.set(acc, i, moment(Date.parse(value)).toISOString());
+        return acc;
+      }
+      if (i === 'comments') {
+        _.set(acc, i, [value]);
+        return acc;
+      }
+      if (['rating', 'roomsCount', 'guestsCount', 'price'].includes(i)) {
+        _.set(acc, i, parseInt(value, 10));
+        return acc;
+      }
+      else {
         _.set(acc, i, data[index]);
         return acc;
       }

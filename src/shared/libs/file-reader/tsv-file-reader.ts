@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 
 const highWaterMark = 8 * 1024;
 export class TSVFileReader extends EventEmitter implements IFileReader {
+  private count = 0;
   constructor(private readonly fileName: string) {
     super();
   }
@@ -24,6 +25,7 @@ export class TSVFileReader extends EventEmitter implements IFileReader {
           const lastPart = strings[strings.length - 1];
           const previousParts = strings.slice(0, -1);
           if (previousParts.length) {
+            this.count += previousParts.length;
             this.emit('string_ready', this.stringToArray(previousParts));
           }
           stringsArray = stringsArray.concat(previousParts);
@@ -35,6 +37,8 @@ export class TSVFileReader extends EventEmitter implements IFileReader {
         }
       }
       if (currentString.length) {
+        this.count += 1;
+        this.emit('final_count_end', this.count);
         this.emit('string_ready', this.stringToArray([currentString]));
         currentString = '';
       }
