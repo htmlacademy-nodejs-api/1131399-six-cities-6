@@ -24,6 +24,7 @@ export const labels: labelType = {
     databaseIsInitiated: 'Database connection is started',
     databaseInitiatedError: 'Database connection error',
     tryNumber: 'database connection try #',
+    createOfferError: 'Offer creating error',
   },
   validation: {
     emailIncorrect: 'Email is incorrect',
