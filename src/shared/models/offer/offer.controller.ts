@@ -1,10 +1,10 @@
-import { inject, injectable } from "inversify";
-import { BaseController } from "../../libs/rest/controller/base-controller.abstract.js";
-import { Request, Response, NextFunction } from "express";
-import { Logger } from "../../libs/logger/index.js";
-import { Label } from "../../libs/label/label.js";
-import { Component } from "../../types/index.js";
-import { HttpMethod } from "../../libs/rest/types/http-methods.enum.js";
+import { inject, injectable } from 'inversify';
+import { BaseController } from '../../libs/rest/controller/base-controller.abstract.js';
+import { Request, Response, NextFunction } from 'express';
+import { Logger } from '../../libs/logger/index.js';
+import { Label } from '../../libs/label/label.js';
+import { Component } from '../../types/index.js';
+import { HttpMethod } from '../../libs/rest/types/http-methods.enum.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -28,33 +28,43 @@ export class OfferController extends BaseController {
     this.addRoute({ path: '/premium', method: HttpMethod.POST, handler: this.getPremiumOffersOnTheScope});
     this.addRoute({ path: '/selected', method: HttpMethod.GET, handler: this.getAllSelectedOffers});
   }
+
   public getOfferById(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
+
   public updateOfferById(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
+
   public patchOfferById(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
+
   public deleteOfferById(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
+
   public createOffer(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
+
   public getAllOffers(_reques: Request, _response: Response, _next: NextFunction) {
     return _response.send(('Hi'));
   }
+
   public getAllCommentsOnOffer(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
+
   public createNewCommentOnOffer(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
+
   public getPremiumOffersOnTheScope(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
+
   public getAllSelectedOffers(_reques: Request, _response: Response, _next: NextFunction) {
 
   }

@@ -1,10 +1,10 @@
-import { injectable } from "inversify";
-import { Response, Router } from "express";
-import { Logger } from "../../logger/index.js";
-import { StatusCodes } from "http-status-codes";
-import { Controller } from "./controller.interface.js";
-import { Route } from "../types/router.interface.js";
-import { Label } from "../../label/label.js";
+import { injectable } from 'inversify';
+import { Response, Router } from 'express';
+import { Logger } from '../../logger/index.js';
+import { StatusCodes } from 'http-status-codes';
+import { Controller } from './controller.interface.js';
+import { Route } from '../types/router.interface.js';
+import { Label } from '../../label/label.js';
 
 const DEFAULT_CONTENT_TYPE = 'application/json';
 

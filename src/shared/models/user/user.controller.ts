@@ -1,10 +1,10 @@
-import { inject, injectable } from "inversify";
-import { BaseController } from "../../libs/rest/controller/base-controller.abstract.js";
-import { Request, Response, NextFunction } from "express";
-import { Logger } from "../../libs/logger/index.js";
-import { Label } from "../../libs/label/label.js";
-import { Component } from "../../types/index.js";
-import { HttpMethod } from "../../libs/rest/types/http-methods.enum.js";
+import { inject, injectable } from 'inversify';
+import { BaseController } from '../../libs/rest/controller/base-controller.abstract.js';
+import { Request, Response, NextFunction } from 'express';
+import { Logger } from '../../libs/logger/index.js';
+import { Label } from '../../libs/label/label.js';
+import { Component } from '../../types/index.js';
+import { HttpMethod } from '../../libs/rest/types/http-methods.enum.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -25,12 +25,15 @@ export class UserController extends BaseController {
   public createNewUser(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
+
   public checkIfUserAuthorized(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
+
   public login(_reques: Request, _response: Response, _next: NextFunction) {
     return _response.send('login');
   }
+
   public logout(_reques: Request, _response: Response, _next: NextFunction) {
     return _response.send('logout');
   }

@@ -1,10 +1,10 @@
-import { inject, injectable } from "inversify";
-import { BaseController } from "../../libs/rest/controller/base-controller.abstract.js";
-import { Request, Response, NextFunction } from "express";
-import { Logger } from "../../libs/logger/index.js";
-import { Label } from "../../libs/label/label.js";
-import { Component } from "../../types/index.js";
-import { HttpMethod } from "../../libs/rest/types/http-methods.enum.js";
+import { inject, injectable } from 'inversify';
+import { BaseController } from '../../libs/rest/controller/base-controller.abstract.js';
+import { Request, Response, NextFunction } from 'express';
+import { Logger } from '../../libs/logger/index.js';
+import { Label } from '../../libs/label/label.js';
+import { Component } from '../../types/index.js';
+import { HttpMethod } from '../../libs/rest/types/http-methods.enum.js';
 
 @injectable()
 export class CommentController extends BaseController {
@@ -23,6 +23,7 @@ export class CommentController extends BaseController {
   public getAllCommentsOnOffer(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
+
   public createNewCommentOnOffer(_reques: Request, _response: Response, _next: NextFunction) {
 
   }
