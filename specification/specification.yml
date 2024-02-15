@@ -1,0 +1,491 @@
+openapi: 3.0.0
+x-stoplight:
+  id: 9bvkbr50ebvu7
+info:
+  title: six cities api
+  version: '1.0'
+  description: Six cities application api
+servers:
+  - url: 'http://localhost: 4000'
+paths:
+  '/offers/{offerId}':
+    parameters:
+      - schema:
+          type: string
+        name: offerId
+        in: path
+        required: true
+        description: offer id
+    get:
+      summary: Get Offer Info by offer id
+      tags:
+        - offers
+      responses:
+        '200':
+          description: Offer found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        4XX :
+          description: Client Error
+        5XX:
+          description: Server Error
+      operationId: get-offer-offerId
+      description: Get information about offer by offer id
+      x-stoplight:
+        id: 76feeamnj7f74
+    put:
+      summary: Update existing offer
+      tags:
+        - offers
+      responses:
+        '200':
+          description: OK
+        4XX:
+          description: Client Error
+        5XX:
+          description: Server Error
+      operationId: put-offers-offerId
+      x-stoplight:
+        id: 9pdyc8d3mxe66
+      description: Update existing offer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Offer'
+    patch:
+      description: ''
+      tags:
+        - offers
+      summary: Modify an existing offer
+      operationId: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Offer'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        4XX:
+          description: Client Error
+        5XX:
+          description: Server Error
+    delete:
+      summary: Delete existing offer
+      tags:
+        - offers
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        5XX:
+          description: Server Error
+      operationId: delete-offers-offerId
+      x-stoplight:
+        id: 4wsa9iypautkl
+      description: Delete existing offer
+  /offers:
+    post:
+      summary: Create New Offer
+      tags:
+        - offers
+      operationId: post-offer
+      responses:
+        '200':
+          description: Offer Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        4XX:
+          description: Client Error
+        5XX:
+          description: Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Offer'
+        description: Post the necessary fields for the API to create a new offer.
+      description: Create a new user.
+      x-stoplight:
+        id: nafwswsl1y1nn
+    parameters: []
+    get:
+      summary: Get all offers
+      tags:
+        - offers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Offer'
+        4XX:
+          description: Client Error
+        5XX:
+          description: Server Error
+      operationId: get-offers
+      x-stoplight:
+        id: i76puy0zfim3x
+      description: Get all offers
+  '/offers/{offerId}/comments':
+    parameters:
+      - schema:
+          type: string
+        name: offerId
+        in: path
+        required: true
+        description: offer id
+    get:
+      summary: Get all comments on offer id
+      tags:
+        - comments
+        - offers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      operationId: get-offers-offerId-comments
+      x-stoplight:
+        id: 0ge1221hkhyii
+      description: Get all comments on offer id
+    post:
+      summary: Add new comment
+      tags:
+        - comments
+        - offers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad Request
+        5XX:
+          description: Server Error
+      operationId: post-offers-offerId-comments
+      x-stoplight:
+        id: vk60wz33n7my6
+      description: Add new comment on the offer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+  /users:
+    post:
+      summary: Create new user
+      tags:
+        - users
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        4XX:
+          description: Client Error
+        5XX:
+          description: Server Error
+      operationId: post-users
+      x-stoplight:
+        id: se2mqv5s50ep2
+      description: Create new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+  /login:
+    post:
+      summary: Login
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    x-stoplight:
+                      id: libcrgidlqvq5
+        4XX:
+          description: Client Error
+        5XX:
+          description: Server Error
+      operationId: post-login
+      x-stoplight:
+        id: p53skxl7s4jd0
+      description: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  x-stoplight:
+                    id: gh9496vondr6c
+                  format: email
+                password:
+                  type: string
+                  x-stoplight:
+                    id: p52a67klubmso
+                  format: password
+  /logout:
+    get:
+      summary: Logout
+      tags:
+        - users
+      responses:
+        2XX:
+          description: Success
+        4XX:
+          description: Client Error
+        5XX:
+          description: Server Error
+      operationId: get-logout
+      x-stoplight:
+        id: znp3uxuescr9l
+      description: Logout
+  '/users/{userId}/active':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+        description: user Id
+    get:
+      summary: Check if user authorized
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    x-stoplight:
+                      id: 3k8njwr5j44ct
+                  active:
+                    type: boolean
+                    x-stoplight:
+                      id: 0qlgrrbmx7oh3
+        4XX:
+          description: Client Error
+        5XX:
+          description: Server Error
+      operationId: get-users-userId-active
+      x-stoplight:
+        id: hpb28u1iwc2h7
+  /offers/premium:
+    post:
+      summary: Get premium offers based on the scope
+      tags:
+        - offers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Offer'
+        4XX:
+          description: Client Error
+        5XX:
+          description: Server Error
+      operationId: post-offers-premium
+      x-stoplight:
+        id: zh3l172ip081c
+      description: Get premium offers based on the scope
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                scope:
+                  type: array
+                  x-stoplight:
+                    id: ggaavzni06qi9
+                  description: city names
+                  items:
+                    x-stoplight:
+                      id: 8jzhsd10tva2j
+                    type: string
+        description: an array of city names
+  /offers/selected:
+    get:
+      summary: get all selected offers of current user
+      tags:
+        - offers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Offer'
+        4XX:
+          description: Client Error
+        5XX:
+          description: Server Error
+      operationId: get-offers-selected
+      x-stoplight:
+        id: pczdcaz6k3cpa
+      description: get all selected offers of current user
+components:
+  schemas:
+    Offer:
+      type: object
+      x-stoplight:
+        id: 2c012a3621aec
+      x-examples:
+        Example 1:
+          title: string
+          description: String
+          date: null
+          city: String
+          previewImg: String
+          images:
+            - String
+          premium: true
+          selected: true
+          rating: 5
+          propertyType: String
+          roomsCount: 5
+          guestsCount: 5
+          price: 5
+          amenities: String
+          athour: String
+          comments:
+            - String
+          coords:
+            lat: 5
+            long: 5
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        city:
+          type: string
+        previewImg:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        premium:
+          type: boolean
+        selected:
+          type: boolean
+        rating:
+          type: integer
+        propertyType:
+          type: string
+        roomsCount:
+          type: integer
+        guestsCount:
+          type: integer
+        price:
+          type: integer
+        amenities:
+          type: string
+        athour:
+          type: string
+        comments:
+          type: array
+          items:
+            type: string
+        coords:
+          type: object
+          properties:
+            lat:
+              type: integer
+            long:
+              type: integer
+      title: Offer
+      description: Offer model
+    Comment:
+      type: object
+      x-examples:
+        Example 1:
+          text: text
+          date: date
+          raiting: 4
+          author: author
+      properties:
+        text:
+          type: string
+        date:
+          type: string
+          format: date
+        raiting:
+          type: integer
+        author:
+          type: string
+      description: Comment model
+    User:
+      type: object
+      x-examples:
+        Example 1:
+          name: name
+          email: email
+          avatar: url
+          password: string
+          type: string
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        avatar:
+          type: string
+        password:
+          type: string
+          format: password
+        type:
+          type: string
+      description: User model
