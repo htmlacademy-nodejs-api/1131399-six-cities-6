@@ -1,0 +1,25 @@
+GET /posts?userId=10&id=95 HTTP/1.1
+Host: jsonplaceholder.typicode.com
+
+###
+
+GET /posts?id=101 HTTP/1.1
+Host: jsonplaceholder.typicode.com
+
+###
+
+GET /posts?userId=10 HTTP/1.1
+Host: jsonplaceholder.typicode.com
+
+###
+
+POST /posts HTTP/1.1
+Host: jsonplaceholder.typicode.com
+Content-Type: application/json
+Content-Length: 88
+
+{
+  "title": "New title",
+  "body": "New body",
+  "userId": 10
+}
