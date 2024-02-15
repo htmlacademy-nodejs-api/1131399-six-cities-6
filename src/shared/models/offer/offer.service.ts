@@ -22,6 +22,7 @@ export class OfferService implements IOfferService {
     this.logger.info(`${this.label.get('offer.created')}: ${offer['_id']}`);
     return offer;
   }
+
   public getOfferById(id: string) {
     return Promise.resolve({id} as OfferDocument);
   }
@@ -41,7 +42,7 @@ export class OfferService implements IOfferService {
   public async getAllOffers() {
     const offers = await this.offerModel.find({}).exec();
     return offers as OfferDocument[];
-      }
+  }
 
   public getAllCommentsOnOffer(_id: string) {
     return Promise.resolve([{}] as Comment[]);

@@ -50,6 +50,7 @@ export class RestApplication {
       this.logger.info(this.label.get('server.serverInitiatedError'));
     }
   }
+
   private async initMiddlewares() {
     this.server.use(express.json);
   }
