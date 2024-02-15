@@ -5,6 +5,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { Label } from '../../libs/label/label.js';
 import { Component } from '../../types/index.js';
 import { HttpMethod } from '../../libs/rest/types/http-methods.enum.js';
+import { IOfferService } from './offer.service.interface.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -12,6 +13,7 @@ export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.Label) protected readonly labels: Label,
+    @inject(Component.OfferService) protected readonly offerService: IOfferService
   ){
     super(logger, labels);
     this.logger.info(this.labels.get('router.offerControllerRegisterRoutes'));
@@ -49,8 +51,9 @@ export class OfferController extends BaseController {
 
   }
 
-  public getAllOffers(_reques: Request, _response: Response, _next: NextFunction) {
-    return _response.send(('Hi'));
+  public async getAllOffers(_reques: Request, response: Response, _next: NextFunction) {
+    const offers = await this.offerService.getAllOffers();
+    this.ok(response, offers);
   }
 
   public getAllCommentsOnOffer(_reques: Request, _response: Response, _next: NextFunction) {

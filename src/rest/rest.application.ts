@@ -31,37 +31,41 @@ export class RestApplication {
       host: this.config.get('DB_HOST'),
       databaseName: this.config.get('DB_NAME'),
     });
-    return this.databaseClient.connect(connectionPath);
+    this.logger.info(this.label.get('db.initDatabase'));
+    try {
+      this.databaseClient.connect(connectionPath);
+      this.logger.info(this.label.get('db.databaseIsInitiated'));
+    } catch(e) {
+      this.logger.info(this.label.get('db.databaseInitiatedError'));
+    }
   }
 
   private async initServer() {
     const port = this.config.get('PORT');
-    this.server.listen(port);
+    try {
+      this.initMiddlewares();
+      this.server.listen(port);
+      this.logger.info(this.label.get('server.serverIsInitiated').replace('%PORT%', `${port}`));
+    } catch(e) {
+      this.logger.info(this.label.get('server.serverInitiatedError'));
+    }
+  }
+  private async initMiddlewares() {
+    this.server.use(express.json);
   }
 
   private async initControllers() {
     this.server.use('/offers', this.offerController.router);
     this.server.use('/users', this.usersController.router);
+    this.logger.info(this.label.get('router.initializedControllers'));
   }
 
   public async init() {
     const port = this.config.get('PORT');
     this.logger.info(this.label.get('application.init'));
     this.logger.info(`${this.label.get('application.startOnPort')} ${port}`);
-    this.logger.info(this.label.get('db.initDatabase'));
-    try {
-      await this.initDb();
-      this.logger.info(this.label.get('db.databaseIsInitiated'));
-    } catch(e) {
-      this.logger.info(this.label.get('db.databaseInitiatedError'));
-    }
+    this.initDb();
+    this.initServer();
     this.initControllers();
-    this.logger.info(this.label.get('router.initializedControllers'));
-    try {
-      await this.initServer();
-      this.logger.info(this.label.get('server.serverIsInitiated').replace('%PORT%', `${port}`));
-    } catch(e) {
-      this.logger.info(this.label.get('server.serverInitiatedError'));
-    }
   }
 }

@@ -53,7 +53,7 @@ export class ImportCommand implements Command {
       (data as string[][]).forEach(async (i) => {
         try {
           const offer = offerFactory.getOffer(i);
-          await this.offerService.create(offer);
+          await this.offerService.createOffer(offer);
           this.currentCount += 1;
           if (this.targetCount === this.currentCount) {
             this.dbClient.disconnect();
