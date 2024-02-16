@@ -1,4 +1,5 @@
 import { Coordinates } from '../../../types/offer.type.js';
+import { User } from '../../../types/user.type.js';
 
 export class CreateOfferDto {
   public title!: string | null;
@@ -14,8 +15,8 @@ export class CreateOfferDto {
   public roomsCount!: number | null;
   public guestsCount!: number | null;
   public price!: number | null;
-  public amenities!: string | null;
-  public athour!: string | null;
+  public amenities!: string[] | null;
+  public athour!: User | null;
   public comments!: string[] | null;
   public coords!: Coordinates | null;
 }

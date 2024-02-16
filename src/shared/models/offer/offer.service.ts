@@ -8,6 +8,8 @@ import { ILabel } from '../../libs/label/label.interface.js';
 import { Model } from 'mongoose';
 import { UpdateOfferDto } from './DTO/update-offer.dto.js';
 import { Comment } from '../../types/comment.type.js';
+import { IUserService } from '../user/user.service.interface.js';
+import { CreateUserDto } from '../user/DTO/create-user.dto.js';
 
 @injectable()
 export class OfferService implements IOfferService {
@@ -15,12 +17,24 @@ export class OfferService implements IOfferService {
     @inject(Component.Logger) private readonly logger: ILogger,
     @inject(Component.Label) private readonly label: ILabel,
     @inject(Component.OfferModel) private readonly offerModel: Model<OfferDocument>,
+    @inject(Component.UserService) private readonly userService: IUserService,
   ){}
 
-  public async createOffer(dto: CreateOfferDto): Promise<OfferDocument> {
-    const offer = await this.offerModel.create(dto);
-    this.logger.info(`${this.label.get('offer.created')}: ${offer['_id']}`);
-    return offer;
+  public async createOffer(dto: CreateOfferDto): Promise<OfferDocument | null> {
+
+    const user = await this.userService.findOrCreate(dto.athour as CreateUserDto);
+    console.log(user);
+    try {
+      const offer = await this.offerModel.create({
+        ...dto,
+        athour: user['_id'],
+      });
+      this.logger.info(`${this.label.get('offer.created')}: ${offer['_id']}`);
+      return offer;
+    } catch(e) {
+      console.log(e);
+      return null;
+    }
   }
 
   public getOfferById(id: string) {

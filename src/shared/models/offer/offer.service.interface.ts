@@ -4,7 +4,7 @@ import { UpdateOfferDto } from './DTO/update-offer.dto.js';
 import { OfferDocument } from './offer.model.js';
 
 export interface IOfferService {
-  createOffer(dto: CreateOfferDto): Promise<OfferDocument>
+  createOffer(dto: CreateOfferDto): Promise<OfferDocument | null>
   getOfferById(id: string): Promise<OfferDocument>
   updateOfferById(dto: UpdateOfferDto): Promise<OfferDocument>
   patchOfferById(dto: UpdateOfferDto): Promise<OfferDocument>

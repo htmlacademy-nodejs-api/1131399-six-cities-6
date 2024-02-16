@@ -40,12 +40,16 @@ export class OfferFactory {
         _.set(acc, i, false);
         return acc;
       }
-      if (i === 'images') {
+      if (i === 'images' || i === 'amenities') {
         _.set(acc, i, value.split(','));
         return acc;
       }
       if (i === 'date') {
         _.set(acc, i, moment(Date.parse(value)).toISOString());
+        return acc;
+      }
+      if (i === 'athour') {
+        _.set(acc, i, JSON.parse(value));
         return acc;
       }
       if (i === 'comments') {
