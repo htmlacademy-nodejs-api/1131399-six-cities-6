@@ -22,11 +22,11 @@ export class CommentController extends BaseController {
     this.addRoute({ path: '/:offerId/comments', method: HttpMethod.POST, handler: this.createNewCommentOnOffer});
   }
 
-  public getAllCommentsOnOffer(_reques: Request, _response: Response, _next: NextFunction) {
+  public getAllCommentsOnOffer(_request: Request, _response: Response, _next: NextFunction) {
 
   }
 
-  public createNewCommentOnOffer(_reques: Request, _response: Response, _next: NextFunction) {
+  public createNewCommentOnOffer(_request: Request, _response: Response, _next: NextFunction) {
 
   }
 }

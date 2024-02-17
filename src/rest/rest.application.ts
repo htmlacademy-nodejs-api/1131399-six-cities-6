@@ -43,7 +43,6 @@ export class RestApplication {
   private async initServer() {
     const port = this.config.get('PORT');
     try {
-      this.initMiddlewares();
       this.server.listen(port);
       this.logger.info(this.label.get('server.serverIsInitiated').replace('%PORT%', `${port}`));
     } catch(e) {
@@ -52,10 +51,19 @@ export class RestApplication {
   }
 
   private async initMiddlewares() {
-    this.server.use(express.json);
+    this.server.use(express.json());
+    this.server.use(express.urlencoded({ extended: true }));
+    this.server.use(function(_req, res, next) {
+      res.setHeader('Access-Control-Allow-Origin', 'localhost:*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      next();
+  })
   }
 
   private async initControllers() {
+    this.initMiddlewares();
     this.server.use('/offers', this.offerController.router);
     this.server.use('/users', this.usersController.router);
     this.logger.info(this.label.get('router.initializedControllers'));
@@ -66,7 +74,7 @@ export class RestApplication {
     this.logger.info(this.label.get('application.init'));
     this.logger.info(`${this.label.get('application.startOnPort')} ${port}`);
     this.initDb();
-    this.initServer();
     this.initControllers();
+    this.initServer();
   }
 }

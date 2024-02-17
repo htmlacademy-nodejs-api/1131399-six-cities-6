@@ -44,6 +44,7 @@ export const labels: labelType = {
   },
   user: {
     created: 'New user created:',
+    errorCreatingUser: 'Error creating user',
   },
   offer: {
     created: 'New offer created:',

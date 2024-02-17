@@ -31,9 +31,15 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
-    // minlength: [6, label.get('validation.passwordMinLengthError')],
-    // maxlength: [12, label.get('validation.passwordMaxLengthError')],
-    set: (password: string) => crypto.createHmac('sha256', password).update(config.get('SALT')).digest('hex')
+    set: (password: string) => {
+      if (password.length < 6) {
+        throw new Error(label.get('validation.passwordMinLengthError'));
+      }
+      if (password.length > 12) {
+        throw new Error(label.get('validation.passwordMaxLengthError'));
+      }
+      return crypto.createHmac('sha256', password).update(config.get('SALT')).digest('hex');
+    }
   },
   type: String,
 }, {

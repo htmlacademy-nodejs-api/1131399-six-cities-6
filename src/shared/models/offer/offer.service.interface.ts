@@ -6,9 +6,9 @@ import { OfferDocument } from './offer.model.js';
 export interface IOfferService {
   createOffer(dto: CreateOfferDto): Promise<OfferDocument | null>
   getOfferById(id: string): Promise<OfferDocument>
-  updateOfferById(dto: UpdateOfferDto): Promise<OfferDocument>
+  updateOfferById(id: string, dto: UpdateOfferDto): Promise<OfferDocument>
   patchOfferById(dto: UpdateOfferDto): Promise<OfferDocument>
-  deleteOfferById(id: string): Promise<OfferDocument>
+  deleteOfferById(id: string): Promise<OfferDocument | null>
   getAllOffers(): Promise<OfferDocument[]>
   getAllCommentsOnOffer(offerId: string): Promise<Comment[]>
   createNewCommentOnOffer(offerId: string, commentDto: Comment): Promise<Comment>

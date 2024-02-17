@@ -6,6 +6,7 @@ import { Label } from '../../libs/label/label.js';
 import { Component } from '../../types/index.js';
 import { HttpMethod } from '../../libs/rest/types/http-methods.enum.js';
 import { IOfferService } from './offer.service.interface.js';
+import { CreateOfferDto } from './DTO/create-offer.dto.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -18,57 +19,66 @@ export class OfferController extends BaseController {
     super(logger, labels);
     this.logger.info(this.labels.get('router.offerControllerRegisterRoutes'));
 
+    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createOffer});
+    this.addRoute({ path: '/', method: HttpMethod.GET, handler: this.getAllOffers});
+    this.addRoute({ path: '/', method: HttpMethod.GET, handler: this.getAllOffers});
     this.addRoute({ path: '/:offerId', method: HttpMethod.GET, handler: this.getOfferById});
     this.addRoute({ path: '/:offerId', method: HttpMethod.PUT, handler: this.updateOfferById});
     this.addRoute({ path: '/:offerId', method: HttpMethod.PATCH, handler: this.patchOfferById});
     this.addRoute({ path: '/:offerId', method: HttpMethod.DELETE, handler: this.deleteOfferById});
-    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createOffer});
-    this.addRoute({ path: '/', method: HttpMethod.GET, handler: this.getAllOffers});
-    this.addRoute({ path: '/', method: HttpMethod.GET, handler: this.getAllOffers});
     this.addRoute({ path: '/:offerId/comments', method: HttpMethod.GET, handler: this.getAllCommentsOnOffer});
     this.addRoute({ path: '/:offerId/comments', method: HttpMethod.POST, handler: this.createNewCommentOnOffer});
     this.addRoute({ path: '/premium', method: HttpMethod.POST, handler: this.getPremiumOffersOnTheScope});
     this.addRoute({ path: '/selected', method: HttpMethod.GET, handler: this.getAllSelectedOffers});
   }
 
-  public getOfferById(_reques: Request, _response: Response, _next: NextFunction) {
-
+  public async getOfferById(request: Request, response: Response, _next: NextFunction) {
+    const id = request.params.offerId;
+    const offer = await this.offerService.getOfferById(id);
+    this.ok(response, offer);
   }
 
-  public updateOfferById(_reques: Request, _response: Response, _next: NextFunction) {
-
-  }
-
-  public patchOfferById(_reques: Request, _response: Response, _next: NextFunction) {
-
-  }
-
-  public deleteOfferById(_reques: Request, _response: Response, _next: NextFunction) {
-
-  }
-
-  public createOffer(_reques: Request, _response: Response, _next: NextFunction) {
-
-  }
-
-  public async getAllOffers(_reques: Request, response: Response, _next: NextFunction) {
+  public async getAllOffers(_request: Request, response: Response, _next: NextFunction) {
     const offers = await this.offerService.getAllOffers();
     this.ok(response, offers);
   }
 
-  public getAllCommentsOnOffer(_reques: Request, _response: Response, _next: NextFunction) {
+  public async createOffer(request: Request, response: Response, _next: NextFunction) {
+    const offerBody = request.body as CreateOfferDto;
+    const offer = await this.offerService.createOffer(offerBody);
+    this.ok(response, offer);
+  }
+
+  public async deleteOfferById(request: Request, response: Response, _next: NextFunction) {
+    const id = request.params.offerId;
+    const offer = await this.offerService.deleteOfferById(id);
+    this.ok(response, offer);
+  }
+
+  public async updateOfferById(request: Request, response: Response, _next: NextFunction) {
+    const id = request.params.offerId;
+    const { body } = request;
+    const offer = await this.offerService.updateOfferById(id, body);
+    this.ok(response, offer);
+  }
+
+  public patchOfferById(_request: Request, _response: Response, _next: NextFunction) {
+  }
+
+
+  public getAllCommentsOnOffer(_request: Request, _response: Response, _next: NextFunction) {
 
   }
 
-  public createNewCommentOnOffer(_reques: Request, _response: Response, _next: NextFunction) {
+  public createNewCommentOnOffer(_request: Request, _response: Response, _next: NextFunction) {
 
   }
 
-  public getPremiumOffersOnTheScope(_reques: Request, _response: Response, _next: NextFunction) {
+  public getPremiumOffersOnTheScope(_request: Request, _response: Response, _next: NextFunction) {
 
   }
 
-  public getAllSelectedOffers(_reques: Request, _response: Response, _next: NextFunction) {
+  public getAllSelectedOffers(_request: Request, _response: Response, _next: NextFunction) {
 
   }
 }

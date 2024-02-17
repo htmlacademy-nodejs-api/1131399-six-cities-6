@@ -24,19 +24,19 @@ export class UserController extends BaseController {
     this.addRoute({ path: '/logout', method: HttpMethod.GET, handler: this.logout});
   }
 
-  public createNewUser(_reques: Request, _response: Response, _next: NextFunction) {
+  public createNewUser(_request: Request, _response: Response, _next: NextFunction) {
 
   }
 
-  public checkIfUserAuthorized(_reques: Request, _response: Response, _next: NextFunction) {
+  public checkIfUserAuthorized(_request: Request, _response: Response, _next: NextFunction) {
 
   }
 
-  public login(_reques: Request, _response: Response, _next: NextFunction) {
+  public login(_request: Request, _response: Response, _next: NextFunction) {
     return _response.send('login');
   }
 
-  public logout(_reques: Request, _response: Response, _next: NextFunction) {
+  public logout(_request: Request, _response: Response, _next: NextFunction) {
     return _response.send('logout');
   }
 }

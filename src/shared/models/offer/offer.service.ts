@@ -21,10 +21,9 @@ export class OfferService implements IOfferService {
   ){}
 
   public async createOffer(dto: CreateOfferDto): Promise<OfferDocument | null> {
-
     const user = await this.userService.findOrCreate(dto.athour as CreateUserDto);
-    console.log(user);
     try {
+      if (!user) throw new Error();
       const offer = await this.offerModel.create({
         ...dto,
         athour: user['_id'],
@@ -32,25 +31,34 @@ export class OfferService implements IOfferService {
       this.logger.info(`${this.label.get('offer.created')}: ${offer['_id']}`);
       return offer;
     } catch(e) {
-      console.log(e);
       return null;
     }
   }
 
-  public getOfferById(id: string) {
-    return Promise.resolve({id} as OfferDocument);
+  public async getOfferById(id: string) {
+    const offer = await this.offerModel.findById(id) as OfferDocument;
+    return offer;
   }
 
-  public updateOfferById(dto: UpdateOfferDto) {
-    return Promise.resolve({ id: dto.id } as OfferDocument);
+  public async updateOfferById(id: string, dto: UpdateOfferDto) {
+    const offer = await this.offerModel.findByIdAndUpdate(id, dto) as OfferDocument;
+    return offer;
   }
 
   public patchOfferById(dto: UpdateOfferDto) {
     return Promise.resolve({ id: dto.id } as OfferDocument);
   }
 
-  public deleteOfferById(id: string) {
-    return Promise.resolve({ id } as OfferDocument);
+  public async deleteOfferById(id: string) {
+    const offer = await this.offerModel.findById(id) as OfferDocument;
+    if (offer) {
+      const { deletedCount } = await this.offerModel.deleteOne({ _id: id });
+      if (deletedCount) {
+        return offer;
+      }
+      return null;
+    }
+    return null;
   }
 
   public async getAllOffers() {

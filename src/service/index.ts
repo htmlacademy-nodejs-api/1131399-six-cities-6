@@ -139,7 +139,6 @@ export const generateFakeOffersData = (n = 100, fileName: string) => {
   const fileWriter = new FileWriter(path.resolve('mocks', fileName));
   fileWriter.on('finish', () => console.log('Запись завершена'));
   fileWriter.on('error', () => console.log('Ошибка записи'));
-  fileWriter.on('finish', () => console.log('Событие drain'));
 
   return getCitiesDataFromApi()
     .then(({ data: cities }) => getOffersDataFromApi()

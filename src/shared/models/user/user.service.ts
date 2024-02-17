@@ -30,12 +30,18 @@ export class UserService implements IUserService {
 
   }
 
-  public async findOrCreate(dto: CreateUserDto): Promise<UserDocument> {
+  public async findOrCreate(dto: CreateUserDto): Promise<UserDocument | null> {
     const user = await this.userModel.findOne({ email: dto.email });
     if (user) {
       return user;
     }
-    const newUser = await this.userModel.create(dto);
-    return newUser;
+    try {
+      const newUser = await this.userModel.create(dto);
+      this.logger.info(this.label.get('user.created'));
+      return newUser;
+    } catch(_e) {
+      this.logger.info(this.label.get('user.errorCreatingUser'));
+      return null;
+    }
   }
 }
