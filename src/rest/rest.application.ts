@@ -50,19 +50,12 @@ export class RestApplication {
     }
   }
 
-  private async initMiddlewares() {
-    this.server.use(express.json());
+  private initMiddlewares() {
     this.server.use(express.urlencoded({ extended: true }));
-    this.server.use(function(_req, res, next) {
-      res.setHeader('Access-Control-Allow-Origin', 'localhost:*');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
-      next();
-  })
+    this.server.use(express.json());
   }
 
-  private async initControllers() {
+  private initControllers() {
     this.initMiddlewares();
     this.server.use('/offers', this.offerController.router);
     this.server.use('/users', this.usersController.router);

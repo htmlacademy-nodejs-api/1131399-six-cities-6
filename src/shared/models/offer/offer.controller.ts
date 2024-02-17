@@ -24,7 +24,6 @@ export class OfferController extends BaseController {
     this.addRoute({ path: '/', method: HttpMethod.GET, handler: this.getAllOffers});
     this.addRoute({ path: '/:offerId', method: HttpMethod.GET, handler: this.getOfferById});
     this.addRoute({ path: '/:offerId', method: HttpMethod.PUT, handler: this.updateOfferById});
-    this.addRoute({ path: '/:offerId', method: HttpMethod.PATCH, handler: this.patchOfferById});
     this.addRoute({ path: '/:offerId', method: HttpMethod.DELETE, handler: this.deleteOfferById});
     this.addRoute({ path: '/:offerId/comments', method: HttpMethod.GET, handler: this.getAllCommentsOnOffer});
     this.addRoute({ path: '/:offerId/comments', method: HttpMethod.POST, handler: this.createNewCommentOnOffer});
@@ -60,9 +59,6 @@ export class OfferController extends BaseController {
     const { body } = request;
     const offer = await this.offerService.updateOfferById(id, body);
     this.ok(response, offer);
-  }
-
-  public patchOfferById(_request: Request, _response: Response, _next: NextFunction) {
   }
 
 

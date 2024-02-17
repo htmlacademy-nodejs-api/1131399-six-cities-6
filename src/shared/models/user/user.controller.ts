@@ -24,8 +24,10 @@ export class UserController extends BaseController {
     this.addRoute({ path: '/logout', method: HttpMethod.GET, handler: this.logout});
   }
 
-  public createNewUser(_request: Request, _response: Response, _next: NextFunction) {
-
+  public async createNewUser(request: Request, response: Response, _next: NextFunction) {
+    const userDto = request.body;
+    const user = await this.userService.findOrCreate(userDto);
+    this.ok(response, user);
   }
 
   public checkIfUserAuthorized(_request: Request, _response: Response, _next: NextFunction) {
