@@ -14,7 +14,7 @@ export const Amenities = {
   Washer: 'washer',
   Towels: 'towels',
   Fridge: 'fridge',
-}
+};
 
 export const Commands = {
   Help: '--help',

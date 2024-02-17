@@ -41,7 +41,7 @@ export const getTSVStringFromOfferObject = (object: Offer): string => {
   const premiumString = premium ? Booleans.true : Booleans.false;
   const selectedString = selected ? Booleans.true : Booleans.false;
   const authorString = JSON.stringify(athour);
-  const amenitiesString = amenities?.join(',')
+  const amenitiesString = amenities?.join(',');
   const coordsString = JSON.stringify(coords);
   const string = Object.values({
     title,
@@ -86,7 +86,7 @@ const getFakeUser = (): User => {
     password,
     type
   });
-}
+};
 
 const getCoordValue = (value: string | number): number => {
   if (typeof value === 'number') {
@@ -105,8 +105,8 @@ export const createOffer = (offer: Offer, cities: Record<City, Coordinates>):Off
   const coords = cities[city as City];
   const athour = getFakeUser();
   const amenities = [...new Set(Array(faker.number.int({ min: 0, max: 7 }))
-  .fill("")
-  .map(() => Amenities[AmenitiesArray[faker.number.int({ min: 0, max: 7 })]]))] as (keyof typeof Amenities)[];
+    .fill('')
+    .map(() => Amenities[AmenitiesArray[faker.number.int({ min: 0, max: 7 })]]))] as (keyof typeof Amenities)[];
 
   return ({
     ...Object.keys(offer).reduce((acc, key) => ({

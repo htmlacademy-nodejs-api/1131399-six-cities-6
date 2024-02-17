@@ -23,7 +23,9 @@ export class OfferService implements IOfferService {
   public async createOffer(dto: CreateOfferDto): Promise<OfferDocument | null> {
     const user = await this.userService.findOrCreate(dto.athour as CreateUserDto);
     try {
-      if (!user) throw new Error();
+      if (!user) {
+        throw new Error();
+      }
       const offer = await this.offerModel.create({
         ...dto,
         athour: user['_id'],
