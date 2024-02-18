@@ -9,7 +9,7 @@ export class UpdateOfferDto {
   public previewImg!: string | null;
   public images!: string[] | null;
   public premium!: boolean | null;
-  public selected!: boolean | null;
+  public selected!: string[] | null;
   public rating!: number | null;
   public propertyType!: string | null;
   public roomsCount!: number | null;

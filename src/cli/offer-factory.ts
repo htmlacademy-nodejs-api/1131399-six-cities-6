@@ -13,7 +13,7 @@ export class OfferFactory {
     previewImg: null,
     images: null,
     premium: null,
-    selected: null,
+    selected: [],
     rating: null,
     propertyType: null,
     roomsCount: null,
@@ -48,7 +48,7 @@ export class OfferFactory {
         _.set(acc, i, moment(Date.parse(value)).toISOString());
         return acc;
       }
-      if (i === 'athour') {
+      if (i === 'athour' || i === 'selected') {
         _.set(acc, i, JSON.parse(value));
         return acc;
       }

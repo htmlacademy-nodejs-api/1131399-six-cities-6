@@ -7,6 +7,8 @@ import { Component } from '../../types/index.js';
 import { HttpMethod } from '../../libs/rest/types/http-methods.enum.js';
 import { IOfferService } from './offer.service.interface.js';
 import { CreateOfferDto } from './DTO/create-offer.dto.js';
+import { ICommentService } from '../comment/comment.service.interface.js';
+import { CreateCommentDto } from '../comment/DTO/create-comment.dto.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -14,7 +16,8 @@ export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.Label) protected readonly labels: Label,
-    @inject(Component.OfferService) protected readonly offerService: IOfferService
+    @inject(Component.OfferService) protected readonly offerService: IOfferService,
+    @inject(Component.CommentService) protected readonly commentService: ICommentService
   ){
     super(logger, labels);
     this.logger.info(this.labels.get('router.offerControllerRegisterRoutes'));
@@ -68,14 +71,18 @@ export class OfferController extends BaseController {
     this.ok(response, offers);
   }
 
+  public async createNewCommentOnOffer(request: Request, response: Response, _next: NextFunction) {
+    const { params, body } = request;
+    const { offerId } = params;
+    const { text, raiting, author } = body;
+    const createCommentDto: CreateCommentDto = { text, author, raiting, offerId };
+    const commentId = await this.commentService.createComment(createCommentDto);
+    this.ok(response, commentId);
+  }
+
   public getAllCommentsOnOffer(_request: Request, _response: Response, _next: NextFunction) {
 
   }
-
-  public createNewCommentOnOffer(_request: Request, _response: Response, _next: NextFunction) {
-
-  }
-
 
   public getAllSelectedOffers(_request: Request, _response: Response, _next: NextFunction) {
 

@@ -39,10 +39,10 @@ export const getTSVStringFromOfferObject = (object: Offer): string => {
   } = object;
   const imagesString = images?.join(' ');
   const premiumString = premium ? Booleans.true : Booleans.false;
-  const selectedString = selected ? Booleans.true : Booleans.false;
   const authorString = JSON.stringify(athour);
   const amenitiesString = amenities?.join(',');
   const coordsString = JSON.stringify(coords);
+  const selectedString = JSON.stringify(selected);
   const string = Object.values({
     title,
     description,
@@ -123,7 +123,7 @@ export const createOffer = (offer: Offer, cities: Record<City, Coordinates>):Off
     roomsCount: faker.number.int({ min: 1, max: 8 }),
     guestsCount: faker.number.int({ min: 1, max: 10 }),
     premium: !!faker.number.int({ min: 0, max: 1 }),
-    selected: !!faker.number.int({ min: 0, max: 1 }),
+    selected: [],
     rating: faker.number.int({ min: 1, max: 5 }),
     price: faker.number.int({ max: 100000, min: 100}),
     coords: {

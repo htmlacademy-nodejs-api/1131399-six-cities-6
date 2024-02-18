@@ -14,7 +14,7 @@ export type Offer = {
   previewImg: string | null;
   images: string[] | null;
   premium: boolean | null;
-  selected: boolean | null;
+  selected: [];
   rating: number | null;
   propertyType: Property | null;
   roomsCount: number | null;

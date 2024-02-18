@@ -15,7 +15,7 @@ const offerSchema = new Schema({
   previewImg: String,
   images: [String],
   premium: Boolean,
-  selected: Boolean,
+  selected: [String],
   rating: Number,
   propertyType: String,
   roomsCount: Number,
