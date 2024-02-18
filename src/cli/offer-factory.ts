@@ -48,12 +48,8 @@ export class OfferFactory {
         _.set(acc, i, moment(Date.parse(value)).toISOString());
         return acc;
       }
-      if (i === 'athour' || i === 'selected') {
+      if (i === 'athour' || i === 'selected' || i === 'comments') {
         _.set(acc, i, JSON.parse(value));
-        return acc;
-      }
-      if (i === 'comments') {
-        _.set(acc, i, [value]);
         return acc;
       }
       if (['rating', 'roomsCount', 'guestsCount', 'price'].includes(i)) {

@@ -64,7 +64,7 @@ export class OfferService implements IOfferService {
   }
 
   public async getAllOffers() {
-    const offers = await this.offerModel.find({}).exec();
+    const offers = await this.offerModel.find({}).populate('athour', ['name', 'email']).exec();
     return offers as OfferDocument[];
   }
 

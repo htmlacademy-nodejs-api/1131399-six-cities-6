@@ -43,6 +43,7 @@ export const getTSVStringFromOfferObject = (object: Offer): string => {
   const amenitiesString = amenities?.join(',');
   const coordsString = JSON.stringify(coords);
   const selectedString = JSON.stringify(selected);
+  const commentString = JSON.stringify(comments);
   const string = Object.values({
     title,
     description,
@@ -59,7 +60,7 @@ export const getTSVStringFromOfferObject = (object: Offer): string => {
     price,
     amenitiesString,
     authorString,
-    comments,
+    commentString,
     coordsString
   }).join('\t');
   return string;
@@ -118,6 +119,7 @@ export const createOffer = (offer: Offer, cities: Record<City, Coordinates>):Off
     date: faker.date.recent(),
     previewImg: faker.image.url(),
     images: Array(10).fill({}).map(() => faker.image.url()),
+    comments: [],
     athour,
     city,
     roomsCount: faker.number.int({ min: 1, max: 8 }),
