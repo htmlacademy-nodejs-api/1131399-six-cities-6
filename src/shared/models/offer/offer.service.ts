@@ -80,7 +80,9 @@ export class OfferService implements IOfferService {
     const offers = await Promise.all(scope.map(async(city) => {
       try {
         const result = await this.offerModel.find({ city });
-        if (!result) return [];
+        if (!result) {
+          return [];
+        }
         return result;
       } catch (e) {
         return [];
