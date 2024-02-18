@@ -40,7 +40,7 @@ export class OfferFactory {
         _.set(acc, i, false);
         return acc;
       }
-      if (i === 'images' || i === 'amenities') {
+      if (['images', 'amenities'].includes(i)) {
         _.set(acc, i, value.split(','));
         return acc;
       }
@@ -48,7 +48,7 @@ export class OfferFactory {
         _.set(acc, i, moment(Date.parse(value)).toISOString());
         return acc;
       }
-      if (i === 'athour' || i === 'selected' || i === 'comments') {
+      if (['athour', 'selected', 'comments'].includes(i)) {
         _.set(acc, i, JSON.parse(value));
         return acc;
       }

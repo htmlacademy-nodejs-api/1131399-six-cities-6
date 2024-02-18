@@ -30,6 +30,15 @@ export class UserService implements IUserService {
 
   }
 
+  public async getUserById(id: string): Promise<UserDocument | null> {
+    const user = await this.userModel.findById(id);
+    if (user) {
+      return user;
+    }
+    return null;
+
+  }
+
   public async findOrCreate(dto: CreateUserDto): Promise<UserDocument | null> {
     const user = await this.userModel.findOne({ email: dto.email });
     if (user) {

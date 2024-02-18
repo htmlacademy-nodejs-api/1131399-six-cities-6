@@ -43,7 +43,7 @@ export class OfferService implements IOfferService {
   }
 
   public async updateOfferById(id: string, dto: UpdateOfferDto) {
-    const offer = await this.offerModel.findByIdAndUpdate(id, dto) as OfferDocument;
+    const offer = await this.offerModel.findByIdAndUpdate(id, dto, { new: true }) as OfferDocument;
     return offer;
   }
 
