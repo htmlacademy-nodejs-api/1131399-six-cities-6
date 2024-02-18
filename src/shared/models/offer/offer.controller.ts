@@ -62,6 +62,12 @@ export class OfferController extends BaseController {
   }
 
 
+  public async getPremiumOffersOnTheScope(request: Request, response: Response, _next: NextFunction) {
+    const { body } = request;
+    const offers = await this.offerService.getPremiumOffersOnTheScope(body);
+    this.ok(response, offers);
+  }
+
   public getAllCommentsOnOffer(_request: Request, _response: Response, _next: NextFunction) {
 
   }
@@ -70,9 +76,6 @@ export class OfferController extends BaseController {
 
   }
 
-  public getPremiumOffersOnTheScope(_request: Request, _response: Response, _next: NextFunction) {
-
-  }
 
   public getAllSelectedOffers(_request: Request, _response: Response, _next: NextFunction) {
 

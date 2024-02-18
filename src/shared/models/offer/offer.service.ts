@@ -76,8 +76,17 @@ export class OfferService implements IOfferService {
     return Promise.resolve(commentDto as Comment);
   }
 
-  public getPremiumOffersOnTheScope(_scope: string[]) {
-    return Promise.resolve([{}] as OfferDocument[]);
+  public async getPremiumOffersOnTheScope(scope: string[]) {
+    const offers = await Promise.all(scope.map(async(city) => {
+      try {
+        const result = await this.offerModel.find({ city });
+        if (!result) return [];
+        return result;
+      } catch (e) {
+        return [];
+      }
+    }));
+    return offers.flat();
   }
 
   public getAllSelectedOffers(_userId: string) {
