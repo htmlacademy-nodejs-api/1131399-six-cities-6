@@ -80,7 +80,6 @@ export class OfferController extends BaseController {
     const createCommentDto: CreateCommentDto = { text, author, raiting, offerId };
     const offer = await this.offerService.getOfferById(offerId);
     const user = await this.userService.getUserById(author);
-    console.log(offer, user);
     if (offer && user) {
       const comment = await this.commentService.createComment(createCommentDto);
       const comments: string[] = [comment['_id'], ...offer.comments || [] ];
