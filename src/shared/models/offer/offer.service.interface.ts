@@ -9,8 +9,9 @@ export interface IOfferService {
   updateOfferById(id: string, dto: UpdateOfferDto): Promise<OfferDocument>
   deleteOfferById(id: string): Promise<OfferDocument | null>
   getAllOffers(): Promise<OfferDocument[]>
-  getAllCommentsOnOffer(offerId: string): Promise<Comment[]>
+  getAllCommentsOnOffer(offerId: string): Promise<OfferDocument | null>
   createNewCommentOnOffer(offerId: string, commentDto: Comment): Promise<Comment>
   getPremiumOffersOnTheScope(scope: string[]): Promise<(OfferDocument | null)[]>
   getAllSelectedOffers(userId: string): Promise<OfferDocument[]>
+  getSelectedFieldOnOffer(offerId: string): Promise<OfferDocument | null>
 }

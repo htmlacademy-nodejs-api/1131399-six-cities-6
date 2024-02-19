@@ -18,6 +18,7 @@ export class UserController extends BaseController {
     super(logger, labels);
     this.logger.info(this.labels.get('router.usersControllerRegisterRoutes'));
 
+    this.addRoute({ path: '/:userId/selected', method: HttpMethod.GET, handler: this.getAllSelectedOffers});
     this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createNewUser});
     this.addRoute({ path: '/:userId/active', method: HttpMethod.GET, handler: this.checkIfUserAuthorized});
     this.addRoute({ path: '/login', method: HttpMethod.POST, handler: this.login});
@@ -40,5 +41,12 @@ export class UserController extends BaseController {
 
   public logout(_request: Request, _response: Response, _next: NextFunction) {
     return _response.send('logout');
+  }
+
+  public async getAllSelectedOffers(request: Request, response: Response, _next: NextFunction) {
+    const { params } = request;
+    const { userId } = params;
+    const selected = await this.userService.getSelectedOffersOnUser(userId);
+    this.ok(response, selected);
   }
 }

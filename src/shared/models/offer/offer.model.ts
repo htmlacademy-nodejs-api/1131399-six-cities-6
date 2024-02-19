@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, model } from 'mongoose';
 import { Offer } from '../../types/index.js';
 import { UserModel } from '../user/user.model.js';
+import { CommentModel } from '../comment/comment.model.js';
 
 export interface OfferDocument extends Offer, Document {
   createdAt: 'Date',
@@ -26,7 +27,10 @@ const offerSchema = new Schema({
     type: mongoose.Types.ObjectId,
     ref: UserModel
   },
-  comments: [String],
+  comments: [{
+    type: mongoose.Types.ObjectId,
+    ref: CommentModel
+  }],
   coords: { lat: Number, long: Number },
 }, {
   timestamps: true,

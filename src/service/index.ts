@@ -78,6 +78,7 @@ const getFakeUser = (): User => {
   const password = faker.internet.password({
     length: faker.number.int({ min: 6, max: 12 }),
   });
+  const selected: string[] = [];
   const type: User['type'] = [UserType.standard, UserType.pro][faker.number.int({ min: 0, max: 1 })];
 
   return ({
@@ -85,7 +86,8 @@ const getFakeUser = (): User => {
     email,
     avatar,
     password,
-    type
+    type,
+    selected,
   });
 };
 

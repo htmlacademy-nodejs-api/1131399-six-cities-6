@@ -68,8 +68,9 @@ export class OfferService implements IOfferService {
     return offers as OfferDocument[];
   }
 
-  public getAllCommentsOnOffer(_id: string) {
-    return Promise.resolve([{}] as Comment[]);
+  public async getAllCommentsOnOffer(offerId: string) {
+    const comments = await this.offerModel.findById(offerId, 'comments').populate('comments').exec();
+    return comments;
   }
 
   public createNewCommentOnOffer(_offerId: string, commentDto: Comment) {
@@ -91,6 +92,10 @@ export class OfferService implements IOfferService {
     return offers.flat();
   }
 
+  public async getSelectedFieldOnOffer(offerId: string) {
+    const selectedField = await this.offerModel.findById(offerId, 'selected').exec();
+    return selectedField;
+  }
   public getAllSelectedOffers(_userId: string) {
     return Promise.resolve([{}] as OfferDocument[]);
   }

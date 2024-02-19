@@ -10,5 +10,6 @@ export type User = {
   avatar?: string;
   password: string;
   type: UserType.standard | UserType.pro;
+  selected: string[];
 }
 

@@ -26,14 +26,13 @@ export class OfferController extends BaseController {
 
     this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createOffer});
     this.addRoute({ path: '/', method: HttpMethod.GET, handler: this.getAllOffers});
-    this.addRoute({ path: '/', method: HttpMethod.GET, handler: this.getAllOffers});
     this.addRoute({ path: '/:offerId', method: HttpMethod.GET, handler: this.getOfferById});
     this.addRoute({ path: '/:offerId', method: HttpMethod.PUT, handler: this.updateOfferById});
     this.addRoute({ path: '/:offerId', method: HttpMethod.DELETE, handler: this.deleteOfferById});
     this.addRoute({ path: '/:offerId/comments', method: HttpMethod.GET, handler: this.getAllCommentsOnOffer});
     this.addRoute({ path: '/:offerId/comments', method: HttpMethod.POST, handler: this.createNewCommentOnOffer});
     this.addRoute({ path: '/premium', method: HttpMethod.POST, handler: this.getPremiumOffersOnTheScope});
-    this.addRoute({ path: '/selected', method: HttpMethod.GET, handler: this.getAllSelectedOffers});
+    this.addRoute({ path: '/:offerId/selected', method: HttpMethod.PATCH, handler: this.addRemoveOfferFromSelected});
   }
 
   public async getOfferById(request: Request, response: Response, _next: NextFunction) {
@@ -90,11 +89,37 @@ export class OfferController extends BaseController {
     this.ok(response, null);
   }
 
-  public getAllCommentsOnOffer(_request: Request, _response: Response, _next: NextFunction) {
-
+  public async getAllCommentsOnOffer(request: Request, response: Response, _next: NextFunction) {
+    const { params } = request;
+    const { offerId } = params;
+    const comments = await this.offerService.getAllCommentsOnOffer(offerId);
+    this.ok(response, comments);
   }
 
-  public getAllSelectedOffers(_request: Request, _response: Response, _next: NextFunction) {
-
+  public async addRemoveOfferFromSelected(request: Request, response: Response, _next: NextFunction) {
+    const { params, body } = request;
+    const { offerId } = params;
+    const { operation, userId } = body;
+    const selectedFieldOnUser = await this.userService.getSelectedFieldOnUser(userId);
+    if (operation === 'ADD') {
+      if (!selectedFieldOnUser.includes(offerId)) {
+        const newSelected = [...selectedFieldOnUser, offerId];
+        const newUser = await this.userService.updateUserById(userId, { selected: newSelected });
+        this.ok(response, newUser);
+        return;
+      }
+      this.ok(response, []);
+      return;
+    }
+    if (operation === 'REMOVE') {
+      if (selectedFieldOnUser.includes(offerId)) {
+        const newSelected = selectedFieldOnUser.filter((i) => i !== offerId);
+        const newUser = await this.userService.updateUserById(userId, { selected: newSelected });
+        this.ok(response, newUser);
+        return;
+      }
+      this.ok(response, []);
+      return;
+    }
   }
 }

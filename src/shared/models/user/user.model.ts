@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { Schema, Document, model } from 'mongoose';
+import { Schema, Document, model, Types } from 'mongoose';
 import { User } from '../../types/index.js';
 import { Label } from '../../libs/label/index.js';
 import { Config } from '../../libs/config/rest.config.js';
@@ -13,7 +13,7 @@ export interface UserDocument extends User, Document {
   updatedAt: Date,
 }
 
-const userSchema = new Schema({
+const userSchema = new Schema<UserDocument>({
   name: {
     type: String,
     required: true,
@@ -42,6 +42,9 @@ const userSchema = new Schema({
     }
   },
   type: String,
+  selected: [{
+    type: Types.ObjectId,
+  }],
 }, {
   timestamps: true,
   collection: 'users'
