@@ -96,6 +96,7 @@ export class OfferService implements IOfferService {
     const selectedField = await this.offerModel.findById(offerId, 'selected').exec();
     return selectedField;
   }
+
   public getAllSelectedOffers(_userId: string) {
     return Promise.resolve([{}] as OfferDocument[]);
   }

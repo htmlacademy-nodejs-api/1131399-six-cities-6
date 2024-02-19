@@ -71,7 +71,7 @@ export class UserService implements IUserService {
       from: 'offers',
       foreignField: '_id',
       localField: 'selected',
-      as: "offers",
+      as: 'offers',
     }).exec();
     console.log('>', user);
     console.log('>>', users);

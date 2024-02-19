@@ -119,7 +119,7 @@ export class OfferController extends BaseController {
         return;
       }
       this.ok(response, []);
-      return;
+
     }
   }
 }
