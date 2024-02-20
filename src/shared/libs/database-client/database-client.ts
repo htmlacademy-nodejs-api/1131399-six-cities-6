@@ -32,7 +32,6 @@ export class DatabaseClient implements IDatabaseClient {
           this.logger.info(this.label.get('db.tryNumber') + (attempt + 1));
           try {
             this.mongoose = await Mongoose.connect(connectString);
-            this.logger.info(this.label.get('db.connectionEstablished'));
             this.isConnected = true;
             attempt = 0;
 

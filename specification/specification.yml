@@ -3,12 +3,12 @@ x-stoplight:
   id: 9bvkbr50ebvu7
 info:
   title: six cities api
-  version: '1.0'
+  version: "1.0"
   description: Six cities application api
 servers:
-  - url: 'http://localhost: 4000'
+  - url: "http://127.0.0.1:4000"
 paths:
-  '/offers/{offerId}':
+  "/offers/{offerId}":
     parameters:
       - schema:
           type: string
@@ -21,13 +21,13 @@ paths:
       tags:
         - offers
       responses:
-        '200':
+        "200":
           description: Offer found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Offer'
-        4XX :
+                $ref: "#/components/schemas/Offer"
+        4XX:
           description: Client Error
         5XX:
           description: Server Error
@@ -40,7 +40,7 @@ paths:
       tags:
         - offers
       responses:
-        '200':
+        "200":
           description: OK
         4XX:
           description: Client Error
@@ -54,25 +54,25 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Offer'
+              $ref: "#/components/schemas/Offer"
     patch:
-      description: ''
+      description: ""
       tags:
         - offers
       summary: Modify an existing offer
-      operationId: ''
+      operationId: ""
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Offer'
+              $ref: "#/components/schemas/Offer"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Offer'
+                $ref: "#/components/schemas/Offer"
         4XX:
           description: Client Error
         5XX:
@@ -82,9 +82,9 @@ paths:
       tags:
         - offers
       responses:
-        '200':
+        "200":
           description: OK
-        '400':
+        "400":
           description: Bad Request
         5XX:
           description: Server Error
@@ -99,12 +99,12 @@ paths:
         - offers
       operationId: post-offer
       responses:
-        '200':
+        "200":
           description: Offer Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Offer'
+                $ref: "#/components/schemas/Offer"
         4XX:
           description: Client Error
         5XX:
@@ -113,7 +113,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Offer'
+              $ref: "#/components/schemas/Offer"
         description: Post the necessary fields for the API to create a new offer.
       description: Create a new user.
       x-stoplight:
@@ -124,14 +124,14 @@ paths:
       tags:
         - offers
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Offer'
+                  $ref: "#/components/schemas/Offer"
         4XX:
           description: Client Error
         5XX:
@@ -140,7 +140,7 @@ paths:
       x-stoplight:
         id: i76puy0zfim3x
       description: Get all offers
-  '/offers/{offerId}/comments':
+  "/offers/{offerId}/comments":
     parameters:
       - schema:
           type: string
@@ -154,17 +154,17 @@ paths:
         - comments
         - offers
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Comment'
-        '400':
+                  $ref: "#/components/schemas/Comment"
+        "400":
           description: Bad Request
-        '500':
+        "500":
           description: Internal Server Error
       operationId: get-offers-offerId-comments
       x-stoplight:
@@ -176,13 +176,13 @@ paths:
         - comments
         - offers
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
-        '400':
+                $ref: "#/components/schemas/Comment"
+        "400":
           description: Bad Request
         5XX:
           description: Server Error
@@ -194,19 +194,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Comment'
+              $ref: "#/components/schemas/Comment"
   /users:
     post:
       summary: Create new user
       tags:
         - users
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
         4XX:
           description: Client Error
         5XX:
@@ -219,14 +219,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
-  /login:
+              $ref: "#/components/schemas/User"
+  /users/login:
     post:
       summary: Login
       tags:
         - users
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -261,7 +261,7 @@ paths:
                   x-stoplight:
                     id: p52a67klubmso
                   format: password
-  /logout:
+  /users/logout:
     get:
       summary: Logout
       tags:
@@ -277,7 +277,7 @@ paths:
       x-stoplight:
         id: znp3uxuescr9l
       description: Logout
-  '/users/{userId}/active':
+  "/users/{userId}/active":
     parameters:
       - schema:
           type: string
@@ -290,7 +290,7 @@ paths:
       tags:
         - users
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -318,14 +318,14 @@ paths:
       tags:
         - offers
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Offer'
+                  $ref: "#/components/schemas/Offer"
         4XX:
           description: Client Error
         5XX:
@@ -356,14 +356,14 @@ paths:
       tags:
         - offers
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Offer'
+                  $ref: "#/components/schemas/Offer"
         4XX:
           description: Client Error
         5XX:

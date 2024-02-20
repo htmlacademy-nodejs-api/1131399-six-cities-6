@@ -13,7 +13,7 @@ export class OfferFactory {
     previewImg: null,
     images: null,
     premium: null,
-    selected: null,
+    selected: [],
     rating: null,
     propertyType: null,
     roomsCount: null,
@@ -40,7 +40,7 @@ export class OfferFactory {
         _.set(acc, i, false);
         return acc;
       }
-      if (i === 'images') {
+      if (['images', 'amenities'].includes(i)) {
         _.set(acc, i, value.split(','));
         return acc;
       }
@@ -48,8 +48,8 @@ export class OfferFactory {
         _.set(acc, i, moment(Date.parse(value)).toISOString());
         return acc;
       }
-      if (i === 'comments') {
-        _.set(acc, i, [value]);
+      if (['athour', 'selected', 'comments'].includes(i)) {
+        _.set(acc, i, JSON.parse(value));
         return acc;
       }
       if (['rating', 'roomsCount', 'guestsCount', 'price'].includes(i)) {

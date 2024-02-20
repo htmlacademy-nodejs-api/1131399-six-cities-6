@@ -14,6 +14,8 @@ import { OfferModel } from '../../shared/models/offer/offer.model.js';
 import { IConfig } from '../../shared/libs/config/config.interface.js';
 import { RestSchema } from '../../shared/libs/config/rest.schema.js';
 import { getDbconnectionPath } from '../../shared/libs/database-client/helpers.js';
+import { UserService } from '../../shared/models/user/user.service.js';
+import { UserModel } from '../../shared/models/user/user.model.js';
 
 export class ImportCommand implements Command {
   private offerService: IOfferService;
@@ -29,7 +31,7 @@ export class ImportCommand implements Command {
     this.logger = new Logger();
     this.label = new Label();
     this.config = new Config(this.logger, this.label);
-    this.offerService = new OfferService(this.logger, this.label, OfferModel);
+    this.offerService = new OfferService(this.logger, this.label, OfferModel, new UserService(this.logger, this.label, UserModel, OfferModel));
     this.dbClient = new DatabaseClient(this.logger, this.label);
   }
 
@@ -53,7 +55,7 @@ export class ImportCommand implements Command {
       (data as string[][]).forEach(async (i) => {
         try {
           const offer = offerFactory.getOffer(i);
-          await this.offerService.create(offer);
+          await this.offerService.createOffer(offer);
           this.currentCount += 1;
           if (this.targetCount === this.currentCount) {
             this.dbClient.disconnect();

@@ -1,15 +1,19 @@
-import { Schema, Document, model } from 'mongoose';
+import crypto from 'node:crypto';
+import { Schema, Document, model, Types } from 'mongoose';
 import { User } from '../../types/index.js';
 import { Label } from '../../libs/label/index.js';
+import { Config } from '../../libs/config/rest.config.js';
+import { Logger } from '../../libs/logger/index.js';
 
+const logger = new Logger();
 const label = new Label();
-
+const config = new Config(logger, label);
 export interface UserDocument extends User, Document {
   createdAt: Date,
   updatedAt: Date,
 }
 
-const userSchema = new Schema({
+const userSchema = new Schema<UserDocument>({
   name: {
     type: String,
     required: true,
@@ -27,12 +31,21 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
-    minlength: [6, label.get('validation.passwordMinLengthError')],
-    maxlength: [12, label.get('validation.passwordMaxLengthError')],
+    set: (password: string) => {
+      if (password.length < 6) {
+        throw new Error(label.get('validation.passwordMinLengthError'));
+      }
+      if (password.length > 12) {
+        throw new Error(label.get('validation.passwordMaxLengthError'));
+      }
+      return crypto.createHmac('sha256', password).update(config.get('SALT')).digest('hex');
+    }
   },
   type: String,
+  selected: [Types.ObjectId],
 }, {
   timestamps: true,
+  collection: 'users'
 });
 
 export const UserModel = model<UserDocument>('User', userSchema);

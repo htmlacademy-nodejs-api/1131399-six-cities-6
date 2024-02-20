@@ -15,7 +15,7 @@ export class CommentService implements ICommentService {
     @inject(Component.CommentModel) private readonly commentModel: Model<CommentDocument>
   ){}
 
-  public async create(dto: CreateCommentDto): Promise<CommentDocument> {
+  public async createComment(dto: CreateCommentDto): Promise<CommentDocument> {
     const comment = await this.commentModel.create(dto);
     this.logger.info(`${this.label.get('comment.created')}: ${comment.id}`);
     return comment;

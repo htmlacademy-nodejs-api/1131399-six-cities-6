@@ -1,0 +1,125 @@
+import { inject, injectable } from 'inversify';
+import { BaseController } from '../../libs/rest/controller/base-controller.abstract.js';
+import { Request, Response, NextFunction } from 'express';
+import { Logger } from '../../libs/logger/index.js';
+import { Label } from '../../libs/label/label.js';
+import { Component } from '../../types/index.js';
+import { HttpMethod } from '../../libs/rest/types/http-methods.enum.js';
+import { IOfferService } from './offer.service.interface.js';
+import { CreateOfferDto } from './DTO/create-offer.dto.js';
+import { ICommentService } from '../comment/comment.service.interface.js';
+import { CreateCommentDto } from '../comment/DTO/create-comment.dto.js';
+import { IUserService } from '../user/user.service.interface.js';
+
+@injectable()
+export class OfferController extends BaseController {
+
+  constructor(
+    @inject(Component.Logger) protected readonly logger: Logger,
+    @inject(Component.Label) protected readonly labels: Label,
+    @inject(Component.OfferService) protected readonly offerService: IOfferService,
+    @inject(Component.CommentService) protected readonly commentService: ICommentService,
+    @inject(Component.UserService) protected readonly userService: IUserService,
+  ){
+    super(logger, labels);
+    this.logger.info(this.labels.get('router.offerControllerRegisterRoutes'));
+
+    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createOffer});
+    this.addRoute({ path: '/', method: HttpMethod.GET, handler: this.getAllOffers});
+    this.addRoute({ path: '/:offerId', method: HttpMethod.GET, handler: this.getOfferById});
+    this.addRoute({ path: '/:offerId', method: HttpMethod.PUT, handler: this.updateOfferById});
+    this.addRoute({ path: '/:offerId', method: HttpMethod.DELETE, handler: this.deleteOfferById});
+    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.GET, handler: this.getAllCommentsOnOffer});
+    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.POST, handler: this.createNewCommentOnOffer});
+    this.addRoute({ path: '/premium', method: HttpMethod.POST, handler: this.getPremiumOffersOnTheScope});
+    this.addRoute({ path: '/:offerId/selected', method: HttpMethod.PATCH, handler: this.addRemoveOfferFromSelected});
+  }
+
+  public async getOfferById(request: Request, response: Response, _next: NextFunction) {
+    const id = request.params.offerId;
+    const offer = await this.offerService.getOfferById(id);
+    this.ok(response, offer);
+  }
+
+  public async getAllOffers(_request: Request, response: Response, _next: NextFunction) {
+    const offers = await this.offerService.getAllOffers();
+    this.ok(response, offers);
+  }
+
+  public async createOffer(request: Request, response: Response, _next: NextFunction) {
+    const offerBody = request.body as CreateOfferDto;
+    const offer = await this.offerService.createOffer(offerBody);
+    this.ok(response, offer);
+  }
+
+  public async deleteOfferById(request: Request, response: Response, _next: NextFunction) {
+    const id = request.params.offerId;
+    const offer = await this.offerService.deleteOfferById(id);
+    this.ok(response, offer);
+  }
+
+  public async updateOfferById(request: Request, response: Response, _next: NextFunction) {
+    const id = request.params.offerId;
+    const { body } = request;
+    const offer = await this.offerService.updateOfferById(id, body);
+    this.ok(response, offer);
+  }
+
+
+  public async getPremiumOffersOnTheScope(request: Request, response: Response, _next: NextFunction) {
+    const { body } = request;
+    const offers = await this.offerService.getPremiumOffersOnTheScope(body);
+    this.ok(response, offers);
+  }
+
+  public async createNewCommentOnOffer(request: Request, response: Response, _next: NextFunction) {
+    const { params, body } = request;
+    const { offerId } = params;
+    const { text, raiting, author } = body;
+    const createCommentDto: CreateCommentDto = { text, author, raiting, offerId };
+    const offer = await this.offerService.getOfferById(offerId);
+    const user = await this.userService.getUserById(author);
+    if (offer && user) {
+      const comment = await this.commentService.createComment(createCommentDto);
+      const comments: string[] = [comment['_id'], ...offer.comments || [] ];
+      const newOffer = await this.offerService.updateOfferById(offer['_id'], { comments });
+      this.ok(response, newOffer);
+      return;
+    }
+    this.ok(response, null);
+  }
+
+  public async getAllCommentsOnOffer(request: Request, response: Response, _next: NextFunction) {
+    const { params } = request;
+    const { offerId } = params;
+    const comments = await this.offerService.getAllCommentsOnOffer(offerId);
+    this.ok(response, comments);
+  }
+
+  public async addRemoveOfferFromSelected(request: Request, response: Response, _next: NextFunction) {
+    const { params, body } = request;
+    const { offerId } = params;
+    const { operation, userId } = body;
+    const selectedFieldOnUser = await this.userService.getSelectedFieldOnUser(userId);
+    if (operation === 'ADD') {
+      if (!selectedFieldOnUser.includes(offerId)) {
+        const newSelected = [...selectedFieldOnUser, offerId];
+        const newUser = await this.userService.updateUserById(userId, { selected: newSelected });
+        this.ok(response, newUser);
+        return;
+      }
+      this.ok(response, []);
+      return;
+    }
+    if (operation === 'REMOVE') {
+      if (selectedFieldOnUser.includes(offerId)) {
+        const newSelected = selectedFieldOnUser.filter((i) => i !== offerId);
+        const newUser = await this.userService.updateUserById(userId, { selected: newSelected });
+        this.ok(response, newUser);
+        return;
+      }
+      this.ok(response, []);
+
+    }
+  }
+}

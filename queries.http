@@ -1,0 +1,55 @@
+GET /offers?userId=10&id=95 HTTP/1.1
+Host: jsonplaceholder.typicode.com
+
+###
+
+GET /offers/65d0ab5e64a4445eed026a36 HTTP/1.1
+Host: localhost:4000
+Content-Type: application/json
+
+###
+
+DELETE /offers/65d0a1ec95be94527b6e774c HTTP/1.1
+Host: localhost:4000
+Content-Type: application/json
+
+###
+
+PUT /offers/65d0ab5e64a4445eed026a36 HTTP/1.1
+Host: localhost:4000
+Content-Type: application/json
+
+{
+  "title": "title",
+  "description": "description",
+  "city": "city",
+  "roomsCount": 8,
+  "guestsCount": 8,
+  "price": 30000
+}
+
+###
+
+POST /users HTTP/1.1
+Host: localhost:4000
+Content-Type: : application/json
+
+{
+  "name": "string ffhg",
+  "email": "string@string.ru",
+  "avatar": "string",
+  "password": "strinlg",
+  "type": "standard"
+}
+
+###
+
+POST /offers/premium HTTP/1.1
+Host: localhost:4000
+Content-Type: : application/json
+
+{
+  "scope": "scope"
+}
+
+###

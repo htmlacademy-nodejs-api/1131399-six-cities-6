@@ -6,6 +6,10 @@ import { Component } from '../../types/component.enum.js';
 import { ILogger } from '../../libs/logger/logger.interface.js';
 import { ILabel } from '../../libs/label/label.interface.js';
 import { Model } from 'mongoose';
+import { UpdateOfferDto } from './DTO/update-offer.dto.js';
+import { Comment } from '../../types/comment.type.js';
+import { IUserService } from '../user/user.service.interface.js';
+import { CreateUserDto } from '../user/DTO/create-user.dto.js';
 
 @injectable()
 export class OfferService implements IOfferService {
@@ -13,11 +17,87 @@ export class OfferService implements IOfferService {
     @inject(Component.Logger) private readonly logger: ILogger,
     @inject(Component.Label) private readonly label: ILabel,
     @inject(Component.OfferModel) private readonly offerModel: Model<OfferDocument>,
+    @inject(Component.UserService) private readonly userService: IUserService,
   ){}
 
-  public async create(dto: CreateOfferDto): Promise<OfferDocument> {
-    const offer = await this.offerModel.create(dto);
-    this.logger.info(`${this.label.get('offer.created')}: ${offer['_id']}`);
+  public async createOffer(dto: CreateOfferDto): Promise<OfferDocument | null> {
+    const user = await this.userService.findOrCreate(dto.athour as CreateUserDto);
+    try {
+      if (!user) {
+        throw new Error();
+      }
+      const offer = await this.offerModel.create({
+        ...dto,
+        athour: user['_id'],
+      });
+      this.logger.info(`${this.label.get('offer.created')}: ${offer['_id']}`);
+      return offer;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  public async getOfferById(id: string) {
+    const offer = await this.offerModel.findById(id) as OfferDocument;
     return offer;
+  }
+
+  public async updateOfferById(id: string, dto: UpdateOfferDto) {
+    const offer = await this.offerModel.findByIdAndUpdate(id, dto, { new: true }) as OfferDocument;
+    return offer;
+  }
+
+  public patchOfferById(dto: UpdateOfferDto) {
+    return Promise.resolve({ id: dto.id } as OfferDocument);
+  }
+
+  public async deleteOfferById(id: string) {
+    const offer = await this.offerModel.findById(id) as OfferDocument;
+    if (offer) {
+      const { deletedCount } = await this.offerModel.deleteOne({ _id: id });
+      if (deletedCount) {
+        return offer;
+      }
+      return null;
+    }
+    return null;
+  }
+
+  public async getAllOffers() {
+    const offers = await this.offerModel.find({}).populate('athour', ['name', 'email']).exec();
+    return offers as OfferDocument[];
+  }
+
+  public async getAllCommentsOnOffer(offerId: string) {
+    const comments = await this.offerModel.findById(offerId, 'comments').populate('comments').exec();
+    return comments;
+  }
+
+  public createNewCommentOnOffer(_offerId: string, commentDto: Comment) {
+    return Promise.resolve(commentDto as Comment);
+  }
+
+  public async getPremiumOffersOnTheScope(scope: string[]) {
+    const offers = await Promise.all(scope.map(async(city) => {
+      try {
+        const result = await this.offerModel.find({ city });
+        if (!result) {
+          return [];
+        }
+        return result;
+      } catch (e) {
+        return [];
+      }
+    }));
+    return offers.flat();
+  }
+
+  public async getSelectedFieldOnOffer(offerId: string) {
+    const selectedField = await this.offerModel.findById(offerId, 'selected').exec();
+    return selectedField;
+  }
+
+  public getAllSelectedOffers(_userId: string) {
+    return Promise.resolve([{}] as OfferDocument[]);
   }
 }
