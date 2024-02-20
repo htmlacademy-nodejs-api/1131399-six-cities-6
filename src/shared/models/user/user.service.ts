@@ -5,15 +5,17 @@ import { IUserService } from './user.service.interface.js';
 import { Component } from '../../types/component.enum.js';
 import { ILogger } from '../../libs/logger/logger.interface.js';
 import { ILabel } from '../../libs/label/label.interface.js';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { UpdateUserDto } from './DTO/update-user.dto.js';
+import { OfferDocument } from '../offer/offer.model.js';
 
 @injectable()
 export class UserService implements IUserService {
   constructor(
     @inject(Component.Logger) private readonly logger: ILogger,
     @inject(Component.Label) private readonly label: ILabel,
-    @inject(Component.UserModel) private readonly userModel: Model<UserDocument>
+    @inject(Component.UserModel) private readonly userModel: Model<UserDocument>,
+    @inject(Component.OfferModel) private readonly offerModel: Model<OfferDocument>,
   ){}
 
   public async create(dto: CreateUserDto): Promise<UserDocument> {
@@ -65,16 +67,16 @@ export class UserService implements IUserService {
     return user;
   }
 
-  public async getSelectedOffersOnUser(userId: string): Promise<UserDocument['selected']> {
+  public async getSelectedOffersOnUser(userId: string): Promise<OfferDocument[]> {
     const user = await this.userModel.findById(userId, 'selected');
-    const users = await this.userModel.aggregate().match({ _id: new Types.ObjectId(userId) }).lookup({
-      from: 'offers',
-      foreignField: '_id',
-      localField: 'selected',
-      as: 'offers',
-    }).exec();
-    console.log('>', user);
-    console.log('>>', users);
-    return users[0]?.selected || [];
+    const selectedOffers = await Promise.all((user?.selected || []).map(async(i) => {
+      const offer = await this.offerModel.findById(i);
+      if (offer) {
+        return offer as OfferDocument;
+      }
+      return {} as OfferDocument
+    }));
+
+    return selectedOffers as OfferDocument[];
   }
 }

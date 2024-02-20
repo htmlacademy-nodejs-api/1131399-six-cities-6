@@ -42,9 +42,7 @@ const userSchema = new Schema<UserDocument>({
     }
   },
   type: String,
-  selected: [{
-    type: Types.ObjectId,
-  }],
+  selected: [Types.ObjectId],
 }, {
   timestamps: true,
   collection: 'users'

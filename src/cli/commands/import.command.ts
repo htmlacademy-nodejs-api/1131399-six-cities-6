@@ -31,7 +31,7 @@ export class ImportCommand implements Command {
     this.logger = new Logger();
     this.label = new Label();
     this.config = new Config(this.logger, this.label);
-    this.offerService = new OfferService(this.logger, this.label, OfferModel, new UserService(this.logger, this.label, UserModel));
+    this.offerService = new OfferService(this.logger, this.label, OfferModel, new UserService(this.logger, this.label, UserModel, OfferModel));
     this.dbClient = new DatabaseClient(this.logger, this.label);
   }
 
