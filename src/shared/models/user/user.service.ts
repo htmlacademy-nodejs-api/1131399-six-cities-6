@@ -74,7 +74,7 @@ export class UserService implements IUserService {
       if (offer) {
         return offer as OfferDocument;
       }
-      return {} as OfferDocument
+      return {} as OfferDocument;
     }));
 
     return selectedOffers as OfferDocument[];
