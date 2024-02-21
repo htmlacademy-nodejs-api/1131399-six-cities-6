@@ -74,7 +74,7 @@ export class RestApplication {
     await this.initDb();
     await this.initMiddlewares();
     await this.initControllers();
-    await this.initExceptionHandler()
+    await this.initExceptionHandler();
     await this.initServer();
   }
 }

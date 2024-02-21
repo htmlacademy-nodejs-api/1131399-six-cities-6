@@ -54,19 +54,19 @@ export const labels: labelType = {
   },
   error: {
     offer: {
-      createOffer: "Error creating offer",
-      deleteOffer: "Error deleting offer",
-      updateOffer: "Error updating offer",
-      patchOffer: "Error patching offer",
-      getOffer: "No offer with such id",
-      getAllOffers: "Error getting all offers",
-      getCommentsOnOffer: "Error getting comments on offer",
-      createCommentOnOffer: "Error creating comments on offer",
+      createOffer: 'Error creating offer',
+      deleteOffer: 'Error deleting offer',
+      updateOffer: 'Error updating offer',
+      patchOffer: 'Error patching offer',
+      getOffer: 'No offer with such id',
+      getAllOffers: 'Error getting all offers',
+      getCommentsOnOffer: 'Error getting comments on offer',
+      createCommentOnOffer: 'Error creating comments on offer',
     },
     user: {
-      createUser: "Error creating user",
-      updateUser: "Error updating user",
-      getUser: "No user",
+      createUser: 'Error creating user',
+      updateUser: 'Error updating user',
+      getUser: 'No user',
     }
   }
 };

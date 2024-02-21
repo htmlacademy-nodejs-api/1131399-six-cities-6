@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
-import { Request, Response, NextFunction } from "express";
-import { IBaseExceptionHandler } from "./exception-handler.interface.js";
+import { Request, Response, NextFunction } from 'express';
+import { IBaseExceptionHandler } from './exception-handler.interface.js';
 import { Component } from '../../types/component.enum.js';
 import { Logger } from '../logger/index.js';
 import { StatusCodes } from 'http-status-codes';
@@ -14,12 +14,13 @@ export class BaseExceptionHandler implements IBaseExceptionHandler {
   ){
     this.logger.info('BaseExceptionHandler register');
   }
+
   catch(error: Error, _reques: Request, response: Response, _next: NextFunction): void {
     this.logger.warn(error.message, error);
     if (error instanceof GetOfferError) {
       response
-      .status(StatusCodes.NOT_FOUND)
-      .json({ error: error.message });
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: error.message });
       return;
     }
     response

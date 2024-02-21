@@ -1,4 +1,4 @@
-import { ILabel } from "../label/label.interface.js";
+import { ILabel } from '../label/label.interface.js';
 import { StatusCodes } from 'http-status-codes';
 
 export interface ICustomError {

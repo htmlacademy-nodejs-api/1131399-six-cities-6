@@ -1,5 +1,5 @@
-import { Label } from "../label/label.js";
-import { ICustomError } from "./customError.interface.js";
+import { Label } from '../label/label.js';
+import { ICustomError } from './customError.interface.js';
 import { StatusCodes } from 'http-status-codes';
 
 export class CustomError extends Error implements ICustomError {

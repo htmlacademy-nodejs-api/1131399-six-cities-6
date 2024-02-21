@@ -1,4 +1,4 @@
-import { CustomError } from "./customError.js";
+import { CustomError } from './customError.js';
 import { StatusCodes } from 'http-status-codes';
 
 export class CreateUserError extends CustomError {
