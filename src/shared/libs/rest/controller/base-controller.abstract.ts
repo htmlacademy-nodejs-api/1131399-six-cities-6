@@ -1,5 +1,6 @@
 import { injectable } from 'inversify';
 import { Response, Router } from 'express';
+import asyncHandler from 'express-async-handler';
 import { Logger } from '../../logger/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { Controller } from './controller.interface.js';
@@ -24,7 +25,7 @@ export abstract class BaseController implements Controller {
   }
 
   public addRoute(route: Route){
-    this._router[route.method](route.path, route.handler.bind(this));
+    this._router[route.method](route.path, asyncHandler(route.handler.bind(this)));
     this.logger.info(`${this.labels.get('router.routeRegistered')} ${route.method.toUpperCase()} ${route.path}`);
   }
 

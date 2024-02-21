@@ -8,6 +8,7 @@ import { ILabel } from '../shared/libs/label/label.interface.js';
 import { IDatabaseClient } from '../shared/libs/database-client/index.js';
 import { getDbconnectionPath } from '../shared/libs/database-client/index.js';
 import { Controller } from '../shared/libs/rest/controller/controller.interface.js';
+import { IBaseExceptionHandler } from '../shared/libs/exceptionHandler/exception-handler.interface.js';
 
 @injectable()
 export class RestApplication {
@@ -19,6 +20,7 @@ export class RestApplication {
     @inject(Component.DatabaseClient) private readonly databaseClient: IDatabaseClient,
     @inject(Component.OfferController) private readonly offerController: Controller,
     @inject(Component.UsersController) private readonly usersController: Controller,
+    @inject(Component.ExceptionHandler) private readonly exceptionHandler: IBaseExceptionHandler,
   ){
     this.server = express();
   }
@@ -56,18 +58,23 @@ export class RestApplication {
   }
 
   private initControllers() {
-    this.initMiddlewares();
     this.server.use('/offers', this.offerController.router);
     this.server.use('/users', this.usersController.router);
     this.logger.info(this.label.get('router.initializedControllers'));
+  }
+
+  private initExceptionHandler() {
+    this.server.use(this.exceptionHandler.catch.bind(this.exceptionHandler));
   }
 
   public async init() {
     const port = this.config.get('PORT');
     this.logger.info(this.label.get('application.init'));
     this.logger.info(`${this.label.get('application.startOnPort')} ${port}`);
-    this.initDb();
-    this.initControllers();
-    this.initServer();
+    await this.initDb();
+    await this.initMiddlewares();
+    await this.initControllers();
+    await this.initExceptionHandler()
+    await this.initServer();
   }
 }

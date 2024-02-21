@@ -31,6 +31,7 @@ export class DatabaseClient implements IDatabaseClient {
         while (attempt < RETRY_COUNT && !this.isConnected) {
           this.logger.info(this.label.get('db.tryNumber') + (attempt + 1));
           try {
+            console.log(connectString);
             this.mongoose = await Mongoose.connect(connectString);
             this.isConnected = true;
             attempt = 0;

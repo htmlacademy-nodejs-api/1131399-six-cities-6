@@ -10,6 +10,7 @@ import { UpdateOfferDto } from './DTO/update-offer.dto.js';
 import { Comment } from '../../types/comment.type.js';
 import { IUserService } from '../user/user.service.interface.js';
 import { CreateUserDto } from '../user/DTO/create-user.dto.js';
+import { GetOfferError } from '../../libs/errors/index.js';
 
 @injectable()
 export class OfferService implements IOfferService {
@@ -39,7 +40,11 @@ export class OfferService implements IOfferService {
 
   public async getOfferById(id: string) {
     const offer = await this.offerModel.findById(id) as OfferDocument;
-    return offer;
+    if (offer) {
+      return offer;
+    } else {
+      throw new GetOfferError();
+    }
   }
 
   public async updateOfferById(id: string, dto: UpdateOfferDto) {
