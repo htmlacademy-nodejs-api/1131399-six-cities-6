@@ -6,6 +6,7 @@ import { Label } from '../../libs/label/label.js';
 import { Component } from '../../types/index.js';
 import { HttpMethod } from '../../libs/rest/types/http-methods.enum.js';
 import { IUserService } from './user.service.interface.js';
+import { IMiddlewares } from '../../libs/middleware/middleware.interface.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -13,7 +14,8 @@ export class UserController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.Label) protected readonly labels: Label,
-    @inject(Component.UserService) protected readonly userService: IUserService
+    @inject(Component.UserService) protected readonly userService: IUserService,
+    @inject(Component.Middlewares) protected readonly middlewares: IMiddlewares,
   ){
     super(logger, labels);
     this.logger.info(this.labels.get('router.usersControllerRegisterRoutes'));

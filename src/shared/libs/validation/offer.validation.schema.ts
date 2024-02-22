@@ -1,0 +1,41 @@
+import vine from '@vinejs/vine';
+
+export const createOfferSchema = vine.object({
+  title: vine.string(),
+  description: vine.string(),
+  date: vine.string(),
+  city: vine.string(),
+  previewImg: vine.string(),
+  images: vine.string(),
+  premium: vine.string(),
+  selected: vine.string(),
+  rating: vine.string(),
+  propertyType: vine.string(),
+  roomsCount: vine.string(),
+  guestsCount: vine.string(),
+  price: vine.string(),
+  amenities: vine.string(),
+  athour: vine.string(),
+  comments: vine.string(),
+  coords: vine.string(),
+});
+
+export const updateOfferSchema = vine.object({
+  title: vine.string(),
+  description: vine.string(),
+  date: vine.string(),
+  city: vine.string(),
+  previewImg: vine.string(),
+  images: vine.string(),
+  premium: vine.string(),
+  selected: vine.string(),
+  rating: vine.string(),
+  propertyType: vine.string(),
+  roomsCount: vine.string(),
+  guestsCount: vine.string(),
+  price: vine.string(),
+  amenities: vine.string(),
+  athour: vine.string(),
+  comments: vine.string(),
+  coords: vine.string(),
+});

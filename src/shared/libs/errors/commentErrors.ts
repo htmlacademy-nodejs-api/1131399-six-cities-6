@@ -9,3 +9,10 @@ export class CreateCommentError extends CustomError {
   }
 }
 
+export class CommentIdValidationError extends CustomError {
+  constructor() {
+    super();
+    this.message = this.label.get('error.comment.idInvalid');
+    this.code = StatusCodes.NOT_ACCEPTABLE;
+  }
+}

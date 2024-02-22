@@ -30,7 +30,7 @@ export abstract class BaseController implements Controller {
       this._router.all(route.path, asyncHandler(route.handler.bind(this)));
     } else {
       this.logger.info(`${this.labels.get('router.routeRegistered')} ${route.method.toUpperCase()} ${route.path}`);
-      this._router[route.method](route.path, asyncHandler(route.handler.bind(this)));
+      this._router[route.method](route.path, ...route.middlewares || [], asyncHandler(route.handler.bind(this)));
     }
   }
 
