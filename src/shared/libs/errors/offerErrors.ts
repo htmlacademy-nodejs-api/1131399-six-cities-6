@@ -33,6 +33,22 @@ export class GetCommentsOnOfferError extends CustomError {
   }
 }
 
+export class GetPremiumOffersOnTheScopeError extends CustomError {
+  constructor() {
+    super();
+    this.message = this.label.get('error.offer.getPremiumOffersOnTheScope');
+    this.code = StatusCodes.NOT_FOUND;
+  }
+}
+
+export class GetSelectedFieldOnOfferError extends CustomError {
+  constructor() {
+    super();
+    this.message = this.label.get('error.offer.getSelectedFieldOnOfferError');
+    this.code = StatusCodes.NOT_FOUND;
+  }
+}
+
 export class CreateCommentOnOfferError extends CustomError {
   constructor() {
     super();

@@ -3,6 +3,6 @@ import { HttpMethod } from './http-methods.enum.js';
 
 export interface Route {
   path: string;
-  method: HttpMethod;
+  method?: HttpMethod;
   handler: (_request: Request, _response: Response, _next: NextFunction) => void;
 }

@@ -28,7 +28,11 @@ export class UserController extends BaseController {
   public async createNewUser(request: Request, response: Response, _next: NextFunction) {
     const userDto = request.body;
     const user = await this.userService.findOrCreate(userDto);
-    this.ok(response, user);
+    if (user) {
+      this.ok(response, user);
+    } else {
+      this.noContent(response, {});
+    }
   }
 
   public checkIfUserAuthorized(_request: Request, _response: Response, _next: NextFunction) {
@@ -47,6 +51,10 @@ export class UserController extends BaseController {
     const { params } = request;
     const { userId } = params;
     const selected = await this.userService.getSelectedOffersOnUser(userId);
-    this.ok(response, selected);
+    if (selected) {
+      this.ok(response, selected);
+    } else {
+      this.noContent(response, []);
+    }
   }
 }

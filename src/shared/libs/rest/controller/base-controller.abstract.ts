@@ -25,8 +25,13 @@ export abstract class BaseController implements Controller {
   }
 
   public addRoute(route: Route){
-    this._router[route.method](route.path, asyncHandler(route.handler.bind(this)));
-    this.logger.info(`${this.labels.get('router.routeRegistered')} ${route.method.toUpperCase()} ${route.path}`);
+    if (!route.method) {
+      this.logger.info(this.labels.get('router.routeErrorRegistered'));
+      this._router.all(route.path, asyncHandler(route.handler.bind(this)));
+    } else {
+      this.logger.info(`${this.labels.get('router.routeRegistered')} ${route.method.toUpperCase()} ${route.path}`);
+      this._router[route.method](route.path, asyncHandler(route.handler.bind(this)));
+    }
   }
 
   public send<T>(response: Response, statusCode: number, data: T){

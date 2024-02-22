@@ -7,6 +7,8 @@ import { ILabel, Label } from '../shared/libs/label/index.js';
 import { IDatabaseClient, DatabaseClient } from '../shared/libs/database-client/index.js';
 import { IBaseExceptionHandler } from '../shared/libs/exceptionHandler/exception-handler.interface.js';
 import { BaseExceptionHandler } from '../shared/libs/exceptionHandler/exception-handler.js';
+import { Controller } from '../shared/libs/rest/controller/controller.interface.js';
+import { ErrorController } from '../shared/libs/errors/error.controller.js';
 
 export const createRestApllicationContainer = () => {
   const container = new Container();
@@ -16,5 +18,6 @@ export const createRestApllicationContainer = () => {
   container.bind<ILabel>(Component.Label).to(Label).inSingletonScope();
   container.bind<IDatabaseClient>(Component.DatabaseClient).to(DatabaseClient).inSingletonScope();
   container.bind<IBaseExceptionHandler>(Component.ExceptionHandler).to(BaseExceptionHandler).inSingletonScope();
+  container.bind<Controller>(Component.ErrorController).to(ErrorController).inSingletonScope();
   return container;
 };

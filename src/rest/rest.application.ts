@@ -21,6 +21,7 @@ export class RestApplication {
     @inject(Component.OfferController) private readonly offerController: Controller,
     @inject(Component.UsersController) private readonly usersController: Controller,
     @inject(Component.ExceptionHandler) private readonly exceptionHandler: IBaseExceptionHandler,
+    @inject(Component.ErrorController) private readonly errorController: Controller,
   ){
     this.server = express();
   }
@@ -60,6 +61,7 @@ export class RestApplication {
   private initControllers() {
     this.server.use('/offers', this.offerController.router);
     this.server.use('/users', this.usersController.router);
+    this.server.use('*', this.errorController.router);
     this.logger.info(this.label.get('router.initializedControllers'));
   }
 
