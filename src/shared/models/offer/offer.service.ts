@@ -10,6 +10,7 @@ import { UpdateOfferDto } from './DTO/update-offer.dto.js';
 import { Comment } from '../../types/comment.type.js';
 import { IUserService } from '../user/user.service.interface.js';
 import { CreateUserDto } from '../user/DTO/create-user.dto.js';
+import { CreateOfferError, DeleteOfferError, GetAllOffersError, GetCommentsOnOfferError, GetOfferError, GetPremiumOffersOnTheScopeError, GetSelectedFieldOnOfferError, UpdateOfferError } from '../../libs/errors/index.js';
 
 @injectable()
 export class OfferService implements IOfferService {
@@ -21,8 +22,8 @@ export class OfferService implements IOfferService {
   ){}
 
   public async createOffer(dto: CreateOfferDto): Promise<OfferDocument | null> {
-    const user = await this.userService.findOrCreate(dto.athour as CreateUserDto);
     try {
+      const user = await this.userService.findOrCreate(dto.athour as CreateUserDto);
       if (!user) {
         throw new Error();
       }
@@ -33,18 +34,34 @@ export class OfferService implements IOfferService {
       this.logger.info(`${this.label.get('offer.created')}: ${offer['_id']}`);
       return offer;
     } catch(e) {
-      return null;
+      throw new CreateOfferError();
     }
   }
 
   public async getOfferById(id: string) {
-    const offer = await this.offerModel.findById(id) as OfferDocument;
-    return offer;
+    try {
+      const offer = await this.offerModel.findById(id) as OfferDocument;
+      if (offer) {
+        return offer;
+      } else {
+        throw new Error();
+      }
+    } catch(_e) {
+      throw new GetOfferError();
+    }
   }
 
   public async updateOfferById(id: string, dto: UpdateOfferDto) {
-    const offer = await this.offerModel.findByIdAndUpdate(id, dto, { new: true }) as OfferDocument;
-    return offer;
+    try {
+      const offer = await this.offerModel.findByIdAndUpdate(id, dto, { new: true }) as OfferDocument;
+      if (offer) {
+        return offer;
+      } else {
+        throw new Error();
+      }
+    } catch(_e) {
+      throw new UpdateOfferError();
+    }
   }
 
   public patchOfferById(dto: UpdateOfferDto) {
@@ -52,25 +69,43 @@ export class OfferService implements IOfferService {
   }
 
   public async deleteOfferById(id: string) {
-    const offer = await this.offerModel.findById(id) as OfferDocument;
-    if (offer) {
-      const { deletedCount } = await this.offerModel.deleteOne({ _id: id });
-      if (deletedCount) {
-        return offer;
+    try {
+      const offer = await this.offerModel.findById(id) as OfferDocument;
+      if (offer) {
+        const { deletedCount } = await this.offerModel.deleteOne({ _id: id });
+        if (deletedCount) {
+          return offer;
+        }
+        throw new Error();
       }
-      return null;
+      throw new Error();
+    } catch(_e) {
+      throw new DeleteOfferError();
     }
-    return null;
   }
 
   public async getAllOffers() {
-    const offers = await this.offerModel.find({}).populate('athour', ['name', 'email']).exec();
-    return offers as OfferDocument[];
+    try {
+      const offers = await this.offerModel.find({}).populate('athour', ['name', 'email']).exec();
+      if (offers) {
+        return offers as OfferDocument[];
+      }
+      throw new Error();
+    } catch(_) {
+      throw new GetAllOffersError();
+    }
   }
 
   public async getAllCommentsOnOffer(offerId: string) {
-    const comments = await this.offerModel.findById(offerId, 'comments').populate('comments').exec();
-    return comments;
+    try {
+      const comments = await this.offerModel.findById(offerId, 'comments').populate('comments').exec();
+      if (comments) {
+        return comments;
+      }
+      throw new Error();
+    } catch(_) {
+      throw new GetCommentsOnOfferError();
+    }
   }
 
   public createNewCommentOnOffer(_offerId: string, commentDto: Comment) {
@@ -78,26 +113,33 @@ export class OfferService implements IOfferService {
   }
 
   public async getPremiumOffersOnTheScope(scope: string[]) {
-    const offers = await Promise.all(scope.map(async(city) => {
-      try {
-        const result = await this.offerModel.find({ city });
-        if (!result) {
+    try {
+      const offers = await Promise.all(scope.map(async(city) => {
+        try {
+          const result = await this.offerModel.find({ city });
+          if (!result) {
+            return [];
+          }
+          return result;
+        } catch (e) {
           return [];
         }
-        return result;
-      } catch (e) {
-        return [];
-      }
-    }));
-    return offers.flat();
+      }));
+      return offers.flat();
+    } catch(_) {
+      throw new GetPremiumOffersOnTheScopeError();
+    }
   }
 
   public async getSelectedFieldOnOffer(offerId: string) {
-    const selectedField = await this.offerModel.findById(offerId, 'selected').exec();
-    return selectedField;
-  }
-
-  public getAllSelectedOffers(_userId: string) {
-    return Promise.resolve([{}] as OfferDocument[]);
+    try {
+      const selectedField = await this.offerModel.findById(offerId, 'selected').exec();
+      if (selectedField) {
+        return selectedField;
+      }
+      throw new Error();
+    } catch(_) {
+      throw new GetSelectedFieldOnOfferError();
+    }
   }
 }

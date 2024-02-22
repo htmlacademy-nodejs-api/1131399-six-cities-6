@@ -6,6 +6,7 @@ import { Component } from '../../types/component.enum.js';
 import { ILogger } from '../../libs/logger/logger.interface.js';
 import { ILabel } from '../../libs/label/label.interface.js';
 import { Model } from 'mongoose';
+import { CreateCommentError } from '../../libs/errors/commentErrors.js';
 
 @injectable()
 export class CommentService implements ICommentService {
@@ -16,8 +17,15 @@ export class CommentService implements ICommentService {
   ){}
 
   public async createComment(dto: CreateCommentDto): Promise<CommentDocument> {
-    const comment = await this.commentModel.create(dto);
-    this.logger.info(`${this.label.get('comment.created')}: ${comment.id}`);
-    return comment;
+    try {
+      const comment = await this.commentModel.create(dto);
+      if (comment) {
+        this.logger.info(`${this.label.get('comment.created')}: ${comment.id}`);
+        return comment;
+      }
+      throw new Error();
+    } catch(_) {
+      throw new CreateCommentError();
+    }
   }
 }

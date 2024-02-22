@@ -52,9 +52,9 @@ export class ImportCommand implements Command {
     const tsvFileReader = new TSVFileReader(filePaths[0]);
     tsvFileReader.read();
     tsvFileReader.on('string_ready', (data) => {
-      (data as string[][]).forEach(async (i) => {
+      (data as string[][]).forEach(async (string) => {
         try {
-          const offer = offerFactory.getOffer(i);
+          const offer = offerFactory.getOffer(string);
           await this.offerService.createOffer(offer);
           this.currentCount += 1;
           if (this.targetCount === this.currentCount) {

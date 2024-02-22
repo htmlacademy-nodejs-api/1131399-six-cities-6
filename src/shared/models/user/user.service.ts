@@ -8,6 +8,7 @@ import { ILabel } from '../../libs/label/label.interface.js';
 import { Model } from 'mongoose';
 import { UpdateUserDto } from './DTO/update-user.dto.js';
 import { OfferDocument } from '../offer/offer.model.js';
+import { CreateUserError, GetSelectedFieldOnUserError, GetSelectedOffersOnUserError, GetUserByEmailError, GetUserByIdError, UpdateUserError } from '../../libs/errors/userErrors.js';
 
 @injectable()
 export class UserService implements IUserService {
@@ -19,64 +20,111 @@ export class UserService implements IUserService {
   ){}
 
   public async create(dto: CreateUserDto): Promise<UserDocument> {
-    const user = await this.userModel.create(dto);
-    this.logger.info(`${this.label.get('user.created')}: ${user.email}`);
-    return user;
+    try{
+      const user = await this.userModel.create(dto);
+      if (user) {
+        this.logger.info(`${this.label.get('user.created')}: ${user.email}`);
+        return user;
+      }
+      throw new Error();
+    } catch(_) {
+      throw new CreateUserError();
+    }
   }
 
   public async findByEmail(email: string): Promise<UserDocument | null> {
-    const user = await this.userModel.findOne({ email });
-    if (user) {
-      return user;
+    try {
+      const user = await this.userModel.findOne({ email });
+      if (user) {
+        return user;
+      }
+      throw new Error();
+    } catch(_) {
+      throw new GetUserByEmailError();
     }
-    return null;
-
   }
 
   public async getUserById(id: string): Promise<UserDocument | null> {
-    const user = await this.userModel.findById(id);
-    if (user) {
-      return user;
+    try {
+      const user = await this.userModel.findById(id);
+      if (user) {
+        return user;
+      }
+      throw new Error();
+    } catch(_) {
+      throw new GetUserByIdError();
     }
-    return null;
 
   }
 
   public async findOrCreate(dto: CreateUserDto): Promise<UserDocument | null> {
-    const user = await this.userModel.findOne({ email: dto.email });
-    if (user) {
-      return user;
-    }
     try {
-      const newUser = await this.userModel.create(dto);
-      this.logger.info(this.label.get('user.created'));
-      return newUser;
+      try {
+        const user = await this.userModel.findOne({ email: dto.email });
+        if (user) {
+          return user;
+        }
+        throw new Error();
+      } catch(_) {
+        try {
+          const newUser = await this.userModel.create(dto);
+          if (newUser) {
+            this.logger.info(this.label.get('user.created'));
+            return newUser;
+          }
+          throw new Error();
+        } catch(_e) {
+          throw new Error();
+        }
+      }
     } catch(_e) {
       this.logger.info(this.label.get('user.errorCreatingUser'));
-      return null;
+      throw new CreateUserError();
     }
   }
 
   public async getSelectedFieldOnUser(userId: string): Promise<UserDocument['selected']> {
-    const user = await this.userModel.findById(userId, 'selected');
-    return (user?.selected || []).map((i) => i.toString());
+    try {
+      const user = await this.userModel.findById(userId, 'selected');
+      if (user) {
+        return (user?.selected || []).map((i) => i.toString());
+      }
+      throw new Error();
+    } catch(_) {
+      throw new GetSelectedFieldOnUserError();
+    }
   }
 
   public async updateUserById(userId: string, dto: UpdateUserDto): Promise<UserDocument | null> {
-    const user = await this.userModel.findByIdAndUpdate(userId, dto, { new: true });
-    return user;
+    try {
+      const user = await this.userModel.findByIdAndUpdate(userId, dto, { new: true });
+      if (user) {
+        return user;
+      }
+      throw new Error();
+    } catch(_) {
+      throw new UpdateUserError();
+    }
   }
 
   public async getSelectedOffersOnUser(userId: string): Promise<OfferDocument[]> {
-    const user = await this.userModel.findById(userId, 'selected');
-    const selectedOffers = await Promise.all((user?.selected || []).map(async(i) => {
-      const offer = await this.offerModel.findById(i);
-      if (offer) {
-        return offer as OfferDocument;
+    try {
+      const user = await this.userModel.findById(userId, 'selected');
+      if (!user) {
+        throw new Error();
       }
-      return {} as OfferDocument;
-    }));
+      const selectedOffers = await Promise.all((user?.selected || []).map(async(i) => {
+        const offer = await this.offerModel.findById(i);
+        if (offer) {
+          return offer as OfferDocument;
+        }
+        return {} as OfferDocument;
+      }));
+      return selectedOffers as OfferDocument[];
 
-    return selectedOffers as OfferDocument[];
+    } catch (_) {
+      throw new GetSelectedOffersOnUserError();
+    }
+
   }
 }

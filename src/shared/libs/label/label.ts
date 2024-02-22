@@ -10,7 +10,7 @@ export class Label implements ILabel {
   constructor() {}
 
   public get (key: keyof labelType): string {
-    return _.get(this.labels, key, this.labels.common.noTranslation) as string;
+    return _.get(this.labels, key, (this.labels.common as Record<string, unknown>).noTranslation) as string;
   }
 
   public getAll () {

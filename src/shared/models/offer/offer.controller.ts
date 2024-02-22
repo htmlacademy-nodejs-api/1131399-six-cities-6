@@ -10,6 +10,7 @@ import { CreateOfferDto } from './DTO/create-offer.dto.js';
 import { ICommentService } from '../comment/comment.service.interface.js';
 import { CreateCommentDto } from '../comment/DTO/create-comment.dto.js';
 import { IUserService } from '../user/user.service.interface.js';
+import { Operations } from './constants.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -38,38 +39,62 @@ export class OfferController extends BaseController {
   public async getOfferById(request: Request, response: Response, _next: NextFunction) {
     const id = request.params.offerId;
     const offer = await this.offerService.getOfferById(id);
-    this.ok(response, offer);
+    if (offer) {
+      this.ok(response, offer);
+    } else {
+      this.noContent(response, {});
+    }
   }
 
   public async getAllOffers(_request: Request, response: Response, _next: NextFunction) {
     const offers = await this.offerService.getAllOffers();
-    this.ok(response, offers);
+    if (offers) {
+      this.ok(response, offers);
+    } else {
+      this.noContent(response, []);
+    }
   }
 
   public async createOffer(request: Request, response: Response, _next: NextFunction) {
     const offerBody = request.body as CreateOfferDto;
     const offer = await this.offerService.createOffer(offerBody);
-    this.ok(response, offer);
+    if (offer) {
+      this.created(response, offer);
+    } else {
+      this.noContent(response, {});
+    }
   }
 
   public async deleteOfferById(request: Request, response: Response, _next: NextFunction) {
     const id = request.params.offerId;
     const offer = await this.offerService.deleteOfferById(id);
-    this.ok(response, offer);
+    if (offer) {
+      this.ok(response, offer);
+    } else {
+      this.noContent(response, {});
+    }
   }
 
   public async updateOfferById(request: Request, response: Response, _next: NextFunction) {
     const id = request.params.offerId;
     const { body } = request;
     const offer = await this.offerService.updateOfferById(id, body);
-    this.ok(response, offer);
+    if (offer) {
+      this.ok(response, offer);
+    } else {
+      this.noContent(response, {});
+    }
   }
 
 
   public async getPremiumOffersOnTheScope(request: Request, response: Response, _next: NextFunction) {
     const { body } = request;
     const offers = await this.offerService.getPremiumOffersOnTheScope(body);
-    this.ok(response, offers);
+    if (offers) {
+      this.ok(response, offers);
+    } else {
+      this.noContent(response, []);
+    }
   }
 
   public async createNewCommentOnOffer(request: Request, response: Response, _next: NextFunction) {
@@ -83,17 +108,21 @@ export class OfferController extends BaseController {
       const comment = await this.commentService.createComment(createCommentDto);
       const comments: string[] = [comment['_id'], ...offer.comments || [] ];
       const newOffer = await this.offerService.updateOfferById(offer['_id'], { comments });
-      this.ok(response, newOffer);
+      this.created(response, newOffer);
       return;
     }
-    this.ok(response, null);
+    this.noContent(response, null);
   }
 
   public async getAllCommentsOnOffer(request: Request, response: Response, _next: NextFunction) {
     const { params } = request;
     const { offerId } = params;
     const comments = await this.offerService.getAllCommentsOnOffer(offerId);
-    this.ok(response, comments);
+    if (comments) {
+      this.ok(response, comments);
+    } else {
+      this.noContent(response, []);
+    }
   }
 
   public async addRemoveOfferFromSelected(request: Request, response: Response, _next: NextFunction) {
@@ -101,24 +130,24 @@ export class OfferController extends BaseController {
     const { offerId } = params;
     const { operation, userId } = body;
     const selectedFieldOnUser = await this.userService.getSelectedFieldOnUser(userId);
-    if (operation === 'ADD') {
+    if (operation === Operations.ADD) {
       if (!selectedFieldOnUser.includes(offerId)) {
         const newSelected = [...selectedFieldOnUser, offerId];
         const newUser = await this.userService.updateUserById(userId, { selected: newSelected });
         this.ok(response, newUser);
         return;
       }
-      this.ok(response, []);
+      this.noContent(response, []);
       return;
     }
-    if (operation === 'REMOVE') {
+    if (operation === Operations.REMOVE) {
       if (selectedFieldOnUser.includes(offerId)) {
         const newSelected = selectedFieldOnUser.filter((i) => i !== offerId);
         const newUser = await this.userService.updateUserById(userId, { selected: newSelected });
         this.ok(response, newUser);
         return;
       }
-      this.ok(response, []);
+      this.noContent(response, []);
 
     }
   }

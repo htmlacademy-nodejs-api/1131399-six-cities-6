@@ -12,6 +12,5 @@ export interface IOfferService {
   getAllCommentsOnOffer(offerId: string): Promise<OfferDocument | null>
   createNewCommentOnOffer(offerId: string, commentDto: Comment): Promise<Comment>
   getPremiumOffersOnTheScope(scope: string[]): Promise<(OfferDocument | null)[]>
-  getAllSelectedOffers(userId: string): Promise<OfferDocument[]>
   getSelectedFieldOnOffer(offerId: string): Promise<OfferDocument | null>
 }

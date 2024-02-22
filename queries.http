@@ -25,7 +25,7 @@ Content-Type: application/json
   "city": "city",
   "roomsCount": 8,
   "guestsCount": 8,
-  "price": 30000
+  "price": 30001
 }
 
 ###

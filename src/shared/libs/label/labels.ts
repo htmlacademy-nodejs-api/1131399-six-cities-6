@@ -1,4 +1,4 @@
-export type labelType = Record<string, Record<string, string>>;
+export type labelType = Record<string, unknown>;
 
 export const labels: labelType = {
   common: {
@@ -32,6 +32,7 @@ export const labels: labelType = {
   },
   router: {
     routeRegistered: 'Route registered',
+    routeErrorRegistered: 'Error Route registered',
     offerControllerRegisterRoutes: 'Register routes for Offer Controller...',
     commentsControllerRegisterRoutes: 'Register routes for Comments Controller...',
     usersControllerRegisterRoutes: 'Register routes for Users Controller...',
@@ -51,5 +52,35 @@ export const labels: labelType = {
   },
   comment: {
     created: 'New comment created:',
+  },
+  error: {
+    offer: {
+      createOffer: 'Error creating offer',
+      deleteOffer: 'Error deleting offer',
+      updateOffer: 'Error updating offer',
+      patchOffer: 'Error patching offer',
+      getOffer: 'No offer with such id',
+      getAllOffers: 'Error getting all offers',
+      getCommentsOnOffer: 'Error getting comments on offer',
+      createCommentOnOffer: 'Error creating comments on offer',
+      getPremiumOffersOnTheScope: 'Error getting premium offers',
+      getSelectedFieldOnOfferError: 'Error getting selected offers',
+    },
+    user: {
+      createUser: 'Error creating user',
+      updateUser: 'Error updating user',
+      getUser: 'No user',
+      getUserByEmail: 'Error getting user by email',
+      getUserById: 'Error getting user by Id',
+      getSelectedFieldOnUser: 'Error getting selected offers ids on user',
+      getSelectedOffersOnUser: 'Error getting selected offers on user',
+      updateUserById: 'No user to update',
+    },
+    comment: {
+      createComment: 'Error creating comment on offer'
+    },
+    common: {
+      errorRequest: 'There is no such resource',
+    }
   }
 };
