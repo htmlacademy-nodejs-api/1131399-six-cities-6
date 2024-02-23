@@ -20,9 +20,9 @@ export class UserController extends BaseController {
     super(logger, labels);
     this.logger.info(this.labels.get('router.usersControllerRegisterRoutes'));
 
-    this.addRoute({ path: '/:userId/selected', method: HttpMethod.GET, handler: this.getAllSelectedOffers});
-    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createNewUser});
-    this.addRoute({ path: '/:userId/active', method: HttpMethod.GET, handler: this.checkIfUserAuthorized});
+    this.addRoute({ path: '/:userId/selected', method: HttpMethod.GET, handler: this.getAllSelectedOffers, middlewares: [this.middlewares.checkUserObjectID]});
+    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createNewUser, middlewares: [this.middlewares.validateCreateUserDTO]});
+    this.addRoute({ path: '/:userId/active', method: HttpMethod.GET, handler: this.checkIfUserAuthorized, middlewares: [this.middlewares.checkUserObjectID]});
     this.addRoute({ path: '/login', method: HttpMethod.POST, handler: this.login});
     this.addRoute({ path: '/logout', method: HttpMethod.GET, handler: this.logout});
   }
