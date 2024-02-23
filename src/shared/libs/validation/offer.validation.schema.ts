@@ -1,48 +1,50 @@
 import vine from '@vinejs/vine';
 import { SchemaTypes } from '@vinejs/vine/types';
+import { Amenities, City, Property } from '../../../constants/enums.js';
+import { boundaries as b } from '../../../constants/constants.js';
 
 export const createOfferSchema: SchemaTypes = vine.object({
-  title: vine.string().minLength(10).maxLength(100),
-  description: vine.string().minLength(20).maxLength(1024),
+  title: vine.string().minLength(b.offer.title.minLength).maxLength(b.offer.title.maxLength),
+  description: vine.string().minLength(b.offer.description.minLength).maxLength(b.offer.description.maxLength),
   date: vine.string(),
-  city: vine.string().in([ 'Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf']),
+  city: vine.string().in([City.Paris, City.Cologne, City.Brussels, City.Amsterdam, City.Hamburg, City.Dusseldorf]),
   previewImg: vine.string().trim().url().regex(new RegExp(/[^\s]+(.*?)\.(jpeg|jpg|png|JPEG|JPG|PNG)$/)),
   images: vine.array(vine.string().trim().url().regex(new RegExp(/[^\s]+(.*?)\.(jpeg|jpg|png|JPEG|JPG|PNG)$/))),
   premium: vine.boolean(),
   selected: vine.array(vine.string()).optional(),
-  rating: vine.number().range([1, 5]).decimal([0, 1]),
-  propertyType: vine.string().in(['apartment', 'house', 'room', 'hotel']),
-  roomsCount: vine.number().range([1, 8]),
-  guestsCount: vine.number().range([1, 10]),
-  price: vine.number().range([100, 100000]),
-  amenities: vine.array(vine.string().toLowerCase().in(['breakfast', 'air conditioning', 'laptop friendly workspace', 'baby seat', 'washer', 'towels', 'fridge'])),
+  rating: vine.number().range([b.offer.rating.min, b.offer.rating.max]).decimal([b.offer.rating.from, b.offer.rating.to]),
+  propertyType: vine.string().in([Property.Apartment, Property.House, Property.Room, Property.Hotel]),
+  roomsCount: vine.number().range([b.offer.roomsCount.min, b.offer.roomsCount.max]),
+  guestsCount: vine.number().range([b.offer.guestsCount.min, b.offer.guestsCount.max]),
+  price: vine.number().range([b.offer.price.min, b.offer.price.max]),
+  amenities: vine.array(vine.string().toLowerCase().in(Object.values(Amenities))),
   athour: vine.string(),
   comments: vine.array(vine.string()),
   coords: vine.object({
-    lat: vine.number().decimal([0, 6]),
-    long: vine.number().decimal([0, 6])
+    lat: vine.number().decimal([b.offer.coordinates.min, b.offer.coordinates.max]),
+    long: vine.number().decimal([b.offer.coordinates.min, b.offer.coordinates.max])
   }),
 });
 
 export const updateOfferSchema: SchemaTypes = vine.object({
-  title: vine.string().minLength(10).maxLength(100).optional(),
-  description: vine.string().minLength(20).maxLength(1024).optional(),
+  title: vine.string().minLength(b.offer.title.minLength).maxLength(b.offer.title.maxLength).optional(),
+  description: vine.string().minLength(b.offer.description.minLength).maxLength(b.offer.description.maxLength).optional(),
   date: vine.string().optional(),
-  city: vine.string().in([ 'Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf']).optional(),
+  city: vine.string().in([ City.Paris, City.Cologne, City.Brussels, City.Amsterdam, City.Hamburg, City.Dusseldorf]).optional(),
   previewImg: vine.string().trim().url().regex(new RegExp(/[^\s]+(.*?)\.(jpeg|jpg|png|JPEG|JPG|PNG)$/)).optional(),
   images: vine.array(vine.string().trim().url().regex(new RegExp(/[^\s]+(.*?)\.(jpeg|jpg|png|JPEG|JPG|PNG)$/))).optional(),
   premium: vine.boolean().optional(),
   selected: vine.array(vine.string()).optional(),
-  rating: vine.number().range([1, 5]).decimal([0, 1]).optional(),
-  propertyType: vine.string().in(['apartment', 'house', 'room', 'hotel']).optional(),
-  roomsCount: vine.number().range([1, 8]).optional(),
-  guestsCount: vine.number().range([1, 10]).optional(),
-  price: vine.number().range([100, 100000]).optional(),
-  amenities: vine.array(vine.string().toLowerCase().in(['breakfast', 'air conditioning', 'laptop friendly workspace', 'baby seat', 'washer', 'towels', 'fridge'])).optional(),
+  rating: vine.number().range([b.offer.rating.min, b.offer.rating.max]).decimal([b.offer.rating.from, b.offer.rating.to]).optional(),
+  propertyType: vine.string().in([Property.Apartment, Property.House, Property.Room, Property.Hotel]).optional(),
+  roomsCount: vine.number().range([b.offer.roomsCount.min, b.offer.roomsCount.max]).optional(),
+  guestsCount: vine.number().range([b.offer.guestsCount.min, b.offer.guestsCount.max]).optional(),
+  price: vine.number().range([b.offer.price.min, b.offer.price.max]).optional(),
+  amenities: vine.array(vine.string().toLowerCase().in(Object.values(Amenities))).optional(),
   athour: vine.string().optional(),
   comments: vine.array(vine.string()).optional(),
   coords: vine.object({
-    lat: vine.number().decimal([0, 6]),
-    long: vine.number().decimal([0, 6])
+    lat: vine.number().decimal([b.offer.coordinates.min, b.offer.coordinates.max]),
+    long: vine.number().decimal([b.offer.coordinates.min, b.offer.coordinates.max])
   }).optional(),
 });

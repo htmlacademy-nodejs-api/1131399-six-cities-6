@@ -33,3 +33,54 @@ export const PATH_TO_LOG_FILE = 'logs/application.log';
 export const TEST_DB_PORT = '27017';
 
 export const TEST_USER_PASSWORD = '123456';
+
+export const boundaries = {
+  offer: {
+    title: {
+      minLength: 10,
+      maxLength: 100,
+    },
+    description: {
+      minLength: 20,
+      maxLength: 1024,
+    },
+    roomsCount: {
+      min: 1,
+      max: 8
+    },
+    guestsCount: {
+      min: 1,
+      max: 10,
+    },
+    price: {
+      min: 100,
+      max: 100000
+    },
+    coordinates: {
+      min: 0,
+      max: 6
+    },
+    rating: {
+      min: 1,
+      max: 5,
+      from: 0,
+      to: 1
+    }
+  },
+  comment: {
+    text: {
+      minLength: 5,
+      maxLength: 1024
+    }
+  },
+  user: {
+    name: {
+      minLength: 1,
+      maxLength: 15
+    },
+    password: {
+      minLength: 6,
+      maxLength: 12
+    },
+  }
+};
