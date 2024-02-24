@@ -17,15 +17,12 @@ export class UploadFileMiddleware implements IUploadFileMiddleware {
       destination: this.uploadDirectory,
       /* eslint-disable @typescript-eslint/no-explicit-any */
       filename: (_req: any, file: { mimetype: any; }, cb: (arg0: null, arg1: string) => void) => {
-        console.log('>>');
         const fileExtension = extension(file.mimetype);
-        console.log('>>', fileExtension);
         const fileName = crypto.randomUUID();
         cb(null, `${fileName}.${fileExtension}`);
       }
     });
     const uploadSingleFileMiddleware = multer({ storage }).single(this.fieldName);
-    console.log(this, request);
 
     return uploadSingleFileMiddleware(request, response, next);
   }
