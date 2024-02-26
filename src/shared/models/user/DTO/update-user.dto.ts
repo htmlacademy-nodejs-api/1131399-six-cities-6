@@ -5,4 +5,5 @@ export class UpdateUserDto {
   public password?: string;
   public type?: string;
   public selected?: string[];
+  public token?: string;
 }

@@ -38,8 +38,15 @@ const userSchema = new Schema<UserDocument>({
       if (password.length > 12) {
         throw new Error(label.get('validation.passwordMaxLengthError'));
       }
-      return crypto.createHmac('sha256', password).update(config.get('SALT')).digest('hex');
+      // pKCX6cTv 52617e8412433187d289137b9fd76509945684c4d2ecc82f21ef71c4a12ac94f
+      const cryptedPassword = crypto.createHmac('sha256', password).update(config.get('SALT')).digest('hex');
+      console.log(password, cryptedPassword);
+      return cryptedPassword;
     }
+  },
+  token: {
+    type: String,
+    required: false,
   },
   type: String,
   selected: [Types.ObjectId],
