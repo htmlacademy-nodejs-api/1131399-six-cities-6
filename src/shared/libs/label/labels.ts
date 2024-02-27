@@ -55,6 +55,7 @@ export const labels: labelType = {
   },
   error: {
     offer: {
+      idInvalid: 'Offer id in invalid',
       createOffer: 'Error creating offer',
       deleteOffer: 'Error deleting offer',
       updateOffer: 'Error updating offer',
@@ -67,6 +68,7 @@ export const labels: labelType = {
       getSelectedFieldOnOfferError: 'Error getting selected offers',
     },
     user: {
+      idInvalid: 'User id in invalid',
       createUser: 'Error creating user',
       updateUser: 'Error updating user',
       getUser: 'No user',
@@ -77,10 +79,14 @@ export const labels: labelType = {
       updateUserById: 'No user to update',
     },
     comment: {
+      idInvalid: 'comment id in invalid',
       createComment: 'Error creating comment on offer'
     },
     common: {
       errorRequest: 'There is no such resource',
+    },
+    middlewares: {
+      register: 'middlewares registered',
     }
   }
 };

@@ -56,3 +56,11 @@ export class GetSelectedOffersOnUserError extends CustomError {
     this.code = StatusCodes.NOT_FOUND;
   }
 }
+
+export class UserIdValidationError extends CustomError {
+  constructor() {
+    super();
+    this.message = this.label.get('error.user.idInvalid');
+    this.code = StatusCodes.NOT_ACCEPTABLE;
+  }
+}

@@ -15,4 +15,5 @@ export const Component = {
   UsersController: Symbol.for('UsersController'),
   ExceptionHandler: Symbol.for('ExceptionHandler'),
   ErrorController: Symbol.for('ErrorController'),
+  Middlewares: Symbol.for('Middlewares'),
 } as const;

@@ -6,6 +6,7 @@ import { Label } from '../../libs/label/label.js';
 import { Component } from '../../types/index.js';
 import { HttpMethod } from '../../libs/rest/types/http-methods.enum.js';
 import { IUserService } from './user.service.interface.js';
+import { IMiddlewares } from '../../libs/middleware/middleware.interface.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -13,14 +14,15 @@ export class UserController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.Label) protected readonly labels: Label,
-    @inject(Component.UserService) protected readonly userService: IUserService
+    @inject(Component.UserService) protected readonly userService: IUserService,
+    @inject(Component.Middlewares) protected readonly middlewares: IMiddlewares,
   ){
     super(logger, labels);
     this.logger.info(this.labels.get('router.usersControllerRegisterRoutes'));
 
-    this.addRoute({ path: '/:userId/selected', method: HttpMethod.GET, handler: this.getAllSelectedOffers});
-    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createNewUser});
-    this.addRoute({ path: '/:userId/active', method: HttpMethod.GET, handler: this.checkIfUserAuthorized});
+    this.addRoute({ path: '/:userId/selected', method: HttpMethod.GET, handler: this.getAllSelectedOffers, middlewares: [this.middlewares.checkUserObjectID]});
+    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createNewUser, middlewares: [this.middlewares.validateCreateUserDTO]});
+    this.addRoute({ path: '/:userId/active', method: HttpMethod.GET, handler: this.checkIfUserAuthorized, middlewares: [this.middlewares.checkUserObjectID]});
     this.addRoute({ path: '/login', method: HttpMethod.POST, handler: this.login});
     this.addRoute({ path: '/logout', method: HttpMethod.GET, handler: this.logout});
   }

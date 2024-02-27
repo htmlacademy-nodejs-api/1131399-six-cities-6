@@ -11,6 +11,7 @@ import { ICommentService } from '../comment/comment.service.interface.js';
 import { CreateCommentDto } from '../comment/DTO/create-comment.dto.js';
 import { IUserService } from '../user/user.service.interface.js';
 import { Operations } from './constants.js';
+import { IMiddlewares } from '../../libs/middleware/middleware.interface.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -21,19 +22,20 @@ export class OfferController extends BaseController {
     @inject(Component.OfferService) protected readonly offerService: IOfferService,
     @inject(Component.CommentService) protected readonly commentService: ICommentService,
     @inject(Component.UserService) protected readonly userService: IUserService,
+    @inject(Component.Middlewares) protected readonly middlewares: IMiddlewares,
   ){
     super(logger, labels);
     this.logger.info(this.labels.get('router.offerControllerRegisterRoutes'));
 
-    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createOffer});
+    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createOffer, middlewares: [this.middlewares.validateCreateOfferDTO]});
     this.addRoute({ path: '/', method: HttpMethod.GET, handler: this.getAllOffers});
-    this.addRoute({ path: '/:offerId', method: HttpMethod.GET, handler: this.getOfferById});
-    this.addRoute({ path: '/:offerId', method: HttpMethod.PUT, handler: this.updateOfferById});
-    this.addRoute({ path: '/:offerId', method: HttpMethod.DELETE, handler: this.deleteOfferById});
-    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.GET, handler: this.getAllCommentsOnOffer});
-    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.POST, handler: this.createNewCommentOnOffer});
+    this.addRoute({ path: '/:offerId', method: HttpMethod.GET, handler: this.getOfferById, middlewares: [this.middlewares.checkOfferObjectID]});
+    this.addRoute({ path: '/:offerId', method: HttpMethod.PUT, handler: this.updateOfferById, middlewares: [this.middlewares.checkOfferObjectID, this.middlewares.validateUpdateOfferDTO]});
+    this.addRoute({ path: '/:offerId', method: HttpMethod.DELETE, handler: this.deleteOfferById, middlewares: [this.middlewares.checkOfferObjectID]});
+    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.GET, handler: this.getAllCommentsOnOffer, middlewares: [this.middlewares.checkOfferObjectID]});
+    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.POST, handler: this.createNewCommentOnOffer, middlewares: [this.middlewares.checkOfferObjectID, this.middlewares.validateCreateCommentsDTO]});
     this.addRoute({ path: '/premium', method: HttpMethod.POST, handler: this.getPremiumOffersOnTheScope});
-    this.addRoute({ path: '/:offerId/selected', method: HttpMethod.PATCH, handler: this.addRemoveOfferFromSelected});
+    this.addRoute({ path: '/:offerId/selected', method: HttpMethod.PATCH, handler: this.addRemoveOfferFromSelected, middlewares: [this.middlewares.checkOfferObjectID]});
   }
 
   public async getOfferById(request: Request, response: Response, _next: NextFunction) {

@@ -9,3 +9,10 @@ export class NoRequestedResourceError extends CustomError {
   }
 }
 
+export class ValidationError extends CustomError {
+  constructor(message: string) {
+    super();
+    this.message = message;
+    this.code = StatusCodes.UNPROCESSABLE_ENTITY;
+  }
+}

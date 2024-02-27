@@ -80,3 +80,11 @@ export class DeleteOfferError extends CustomError {
     this.code = StatusCodes.INTERNAL_SERVER_ERROR;
   }
 }
+
+export class OfferIdValidationError extends CustomError {
+  constructor() {
+    super();
+    this.message = this.label.get('error.offer.idInvalid');
+    this.code = StatusCodes.NOT_ACCEPTABLE;
+  }
+}

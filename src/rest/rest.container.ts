@@ -9,6 +9,8 @@ import { IBaseExceptionHandler } from '../shared/libs/exceptionHandler/exception
 import { BaseExceptionHandler } from '../shared/libs/exceptionHandler/exception-handler.js';
 import { Controller } from '../shared/libs/rest/controller/controller.interface.js';
 import { ErrorController } from '../shared/libs/errors/error.controller.js';
+import { IMiddlewares } from '../shared/libs/middleware/middleware.interface.js';
+import { Middlewares } from '../shared/libs/middleware/middleware.js';
 
 export const createRestApllicationContainer = () => {
   const container = new Container();
@@ -19,5 +21,6 @@ export const createRestApllicationContainer = () => {
   container.bind<IDatabaseClient>(Component.DatabaseClient).to(DatabaseClient).inSingletonScope();
   container.bind<IBaseExceptionHandler>(Component.ExceptionHandler).to(BaseExceptionHandler).inSingletonScope();
   container.bind<Controller>(Component.ErrorController).to(ErrorController).inSingletonScope();
+  container.bind<IMiddlewares>(Component.Middlewares).to(Middlewares).inSingletonScope();
   return container;
 };
