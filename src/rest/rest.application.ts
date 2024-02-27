@@ -56,6 +56,7 @@ export class RestApplication {
   private initMiddlewares() {
     this.server.use(express.urlencoded({ extended: true }));
     this.server.use(express.json());
+    this.server.use('/files', express.static(this.config.get('UPLOAD_DIRECTORY')));
   }
 
   private initControllers() {
