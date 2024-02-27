@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import crypto from 'node:crypto';
 import { BaseController } from '../../libs/rest/controller/base-controller.abstract.js';
 import { Request, Response, NextFunction } from 'express';
 import { Logger } from '../../libs/logger/index.js';
@@ -10,6 +11,7 @@ import { IMiddlewares } from '../../libs/middleware/middleware.interface.js';
 import { UploadFileMiddleware } from '../../libs/upload-file-middleware/upload-file.middleware.js';
 import { IConfig } from '../../libs/config/config.interface.js';
 import { RestSchema } from '../../libs/config/rest.schema.js';
+import { IAuthorizationService } from '../../libs/rest/authorization/authorization.service.interface.js';
 
 interface MulterRequest extends Request {
   file: Record<string, unknown>;
@@ -23,6 +25,7 @@ export class UserController extends BaseController {
     @inject(Component.Config) private readonly config: IConfig<RestSchema>,
     @inject(Component.UserService) protected readonly userService: IUserService,
     @inject(Component.Middlewares) protected readonly middlewares: IMiddlewares,
+    @inject(Component.Authorization) protected readonly authorization: IAuthorizationService,
   ){
     super(logger, labels);
     this.logger.info(this.labels.get('router.usersControllerRegisterRoutes'));
@@ -31,8 +34,8 @@ export class UserController extends BaseController {
     this.addRoute({ path: '/:userId/selected', method: HttpMethod.GET, handler: this.getAllSelectedOffers, middlewares: [this.middlewares.checkUserObjectID]});
     this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.createNewUser, middlewares: [this.middlewares.validateCreateUserDTO]});
     this.addRoute({ path: '/:userId/active', method: HttpMethod.GET, handler: this.checkIfUserAuthorized, middlewares: [this.middlewares.checkUserObjectID]});
-    this.addRoute({ path: '/login', method: HttpMethod.POST, handler: this.login});
-    this.addRoute({ path: '/logout', method: HttpMethod.GET, handler: this.logout});
+    this.addRoute({ path: '/login', method: HttpMethod.POST, handler: this.login });
+    this.addRoute({ path: '/logout', method: HttpMethod.GET, handler: this.logout });
     this.addRoute({
       path: '/:userId/avatar',
       method: HttpMethod.POST,
@@ -63,8 +66,24 @@ export class UserController extends BaseController {
 
   }
 
-  public login(_request: Request, _response: Response, _next: NextFunction) {
-    return _response.send('login');
+  public async login(request: Request, response: Response, _next: NextFunction) {
+    const { login, password } = request.body;
+    const user = await this.userService.findByEmail(login);
+    if (user) {
+      const correctPassword = user.password;
+      const incomingPassword = crypto.createHmac('sha256', password).update(this.config.get('SALT')).digest('hex');
+      if (correctPassword !== incomingPassword) {
+        throw new Error();
+      }
+      const accessToken = await this.authorization.createToken({ password: correctPassword, id: user._id, email: user.email });
+      console.log(accessToken);
+      await this.userService.updateUserById(user._id, { token: accessToken });
+      this.ok(response, { accessToken });
+      return;
+    } else {
+      throw new Error();
+    }
+    return response.send('login');
   }
 
   public logout(_request: Request, _response: Response, _next: NextFunction) {

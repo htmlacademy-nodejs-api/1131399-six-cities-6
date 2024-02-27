@@ -11,5 +11,6 @@ export type User = {
   password: string;
   type: UserType.standard | UserType.pro;
   selected: string[];
+  token?: string | null;
 }
 

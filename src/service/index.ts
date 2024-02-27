@@ -75,6 +75,7 @@ const getFakeUser = (): User => {
     provider: faker.internet.domainName()
   });
   const avatar = faker.internet.avatar();
+  const token = null;
   const password = faker.internet.password({
     length: faker.number.int({ min: 6, max: 12 }),
   });
@@ -88,6 +89,7 @@ const getFakeUser = (): User => {
     password,
     type,
     selected,
+    token
   });
 };
 

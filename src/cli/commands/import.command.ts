@@ -62,7 +62,7 @@ export class ImportCommand implements Command {
           }
         } catch(e) {
           this.logger.info(this.label.get('db.createOfferError'));
-          this.dbClient.disconnect();
+          //this.dbClient.disconnect();
         }
       });
     });
